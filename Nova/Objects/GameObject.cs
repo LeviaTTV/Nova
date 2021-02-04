@@ -3,8 +3,6 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Nova.Environment;
 using Nova.Environment.Foliage;
-using IDrawable = Nova.Common.Sprite.IDrawable;
-using IUpdateable = Nova.Common.Sprite.IUpdateable;
 
 namespace Nova.Objects
 {

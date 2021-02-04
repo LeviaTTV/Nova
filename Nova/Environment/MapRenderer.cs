@@ -6,7 +6,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Nova.Common.Extensions;
 using Nova.Common.Primitives;
 using Nova.Common.Sprite;
-using Nova.Environment.Foliage;
 using Nova.Objects;
 
 namespace Nova.Environment

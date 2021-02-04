@@ -32,6 +32,23 @@
 /processorParam:TextureFormat=Color
 /build:Environment/Trees/TreesBrownTexture.png
 
+#begin Environment/Trees/TreesDead.nvs
+/importer:SpriteSheetImporter
+/processor:SpriteSheetProcessor
+/build:Environment/Trees/TreesDead.nvs
+
+#begin Environment/Trees/TreesDeadTexture.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Environment/Trees/TreesDeadTexture.png
+
 #begin Environment/Trees/TreesGreen.nvs
 /importer:SpriteSheetImporter
 /processor:SpriteSheetProcessor
@@ -48,6 +65,40 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Environment/Trees/TreesGreenTexture.png
+
+#begin Environment/Trees/TreesOrange.nvs
+/importer:SpriteSheetImporter
+/processor:SpriteSheetProcessor
+/build:Environment/Trees/TreesOrange.nvs
+
+#begin Environment/Trees/TreesOrangeTexture.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Environment/Trees/TreesOrangeTexture.png
+
+#begin Environment/Trees/TreesPale.nvs
+/importer:SpriteSheetImporter
+/processor:SpriteSheetProcessor
+/build:Environment/Trees/TreesPale.nvs
+
+#begin Environment/Trees/TreesPaleTexture.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Environment/Trees/TreesPaleTexture.png
 
 #begin Fonts/Arial8.spritefont
 /importer:FontDescriptionImporter

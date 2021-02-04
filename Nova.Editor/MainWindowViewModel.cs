@@ -284,8 +284,13 @@ namespace Editor
                     lock (_lock)
                         assetSerialization.Serialize(item, fs);
 
+                    string name = Path.GetFileNameWithoutExtension(_openFromImageFileName);
+
+                    if (_drawable is SpriteSheet sheet)
+                        name = sheet.Name;
+
                     if (_openFromImageFileName != null)
-                        File.Copy(_openFromImageFileName, Path.Combine(Path.GetDirectoryName(fileName), Path.GetFileNameWithoutExtension(_openFromImageFileName) + "Texture" + Path.GetExtension(_openFromImageFileName)));
+                        File.Copy(_openFromImageFileName, Path.Combine(Path.GetDirectoryName(fileName), name + "Texture" + Path.GetExtension(_openFromImageFileName)));
                 }
             }
         }
