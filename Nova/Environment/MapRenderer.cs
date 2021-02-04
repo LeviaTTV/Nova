@@ -33,13 +33,13 @@ namespace Nova.Environment
 
         public void LoadContent(ContentManager content)
         {
-            _font = content.Load<SpriteFont>("DefaultFont");
+            _font = content.Load<SpriteFont>("Fonts/Arial8");
             _positionRectangle = new PrimitiveRectangle(_device, Color.Red);
 
             var dict = new Dictionary<string, SpriteSheet>();
 
 
-            var tileMappings = content.LoadObject<TileMappings>("TileMappings");
+            var tileMappings = content.LoadObject<TileMappings>("Settings/TileMappings");
 
             var sheetsToLoad = tileMappings.Mappings.Select(x => x.Sheet).ToList();
             foreach (var sheetToLoad in sheetsToLoad.Distinct())

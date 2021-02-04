@@ -25,7 +25,7 @@ namespace Nova.Environment
         private readonly List<SpriteTransition> _spriteTransitions = new();
         private FoliageMappings _foliageMappings;
 
-        private readonly List<GameObject> _gameObjects = new List<GameObject>();
+        private readonly List<FoliageGameObject> _gameObjects = new List<FoliageGameObject>();
 
         public MapGenerator(GraphicsDevice device, int seed, ContentManager contentManager)
         {
@@ -44,8 +44,8 @@ namespace Nova.Environment
                 TileHeight = 32
             };
 
-            _tileMappings = _contentManager.LoadObject<TileMappings>("TileMappings");
-            _foliageMappings = _contentManager.LoadObject<FoliageMappings>("FoliageMappings");
+            _tileMappings = _contentManager.LoadObject<TileMappings>("Settings/TileMappings");
+            _foliageMappings = _contentManager.LoadObject<FoliageMappings>("Settings/FoliageMappings");
 
             PreloadSpriteSheets();
             PreloadTransitionMasks();
@@ -61,7 +61,7 @@ namespace Nova.Environment
 
             FoliagePass(map);
 
-            map.GameObjects = _gameObjects;
+            map.GameObjects = _gameObjects.OrderBy(x => x.Tile.Y).Cast<GameObject>().ToList();
             return map;
         }
 
@@ -102,7 +102,7 @@ namespace Nova.Environment
                 }
             }
 
-            var poissonDiscSamples = new PoissonDiscSampler(map.Width, map.Height, 1).Samples().Select(x => new TileCoordinate((int)x.X, (int)x.Y));
+            var poissonDiscSamples = new PoissonDiscSampler(map.Width, map.Height, 2).Samples().Select(x => new TileCoordinate((int)x.X, (int)x.Y));
             foreach (var tileCoordinate in poissonDiscSamples)
             {
                 var tile = map.Tiles[tileCoordinate];
@@ -142,7 +142,7 @@ namespace Nova.Environment
                 {
                     if (map.Tiles.TryGetValue(new TileCoordinate(x, y), out var testTile))
                     {
-                        if (tile.FoliageType == mapping.Type)
+                        if (testTile.FoliageType == mapping.Type)
                             return false;
                     }
                 }

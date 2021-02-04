@@ -23,14 +23,48 @@
                 {
                     "TileType": "Sand",
                     "Reduce": 0.95
+                },
+                {
+                    "TileType": "Gravel",
+                    "Reduce": 0.95
                 }
             ]
         },
         {
-            "Type": "Nova.Objects.Environment.Grass",
-            "NoiseThreshold": 0.5,
-            "PoissonThreshold": 0.7,
-            "SameTypeRadius": 2,
+            "Type": "Nova.Objects.Environment.Mushroom",
+            "NoiseThreshold": 0.8,
+            "PoissonThreshold": 0.9,
+            "SameTypeRadius": 0,
+            "PoissonPass": true,
+            "NoisePass": true,
+            "EligibleTileTypes": [
+                {
+                    "TileType": "LightGrass",
+                    "Reduce": 0.9
+                },
+                {
+                    "TileType": "DeadGrass",
+                    "Reduce": 0.9
+                },
+                {
+                    "TileType": "Grass",
+                    "Reduce": 0.9
+                },
+                {
+                    "TileType": "Sand",
+                    "Reduce": 0.9
+                },
+                {
+                    "TileType": "Gravel",
+                    "Reduce": 0.9
+                }
+            ]
+        },
+        {
+            "Type": "Nova.Objects.Environment.Tree",
+            "NoiseThreshold": 0.6,
+            "PoissonThreshold": 0.8,
+            "SameTypeRadius": 3,
             "PoissonPass": true,
             "NoisePass": true,
             "EligibleTileTypes": [
@@ -40,14 +74,48 @@
                 },
                 {
                     "TileType": "DeadGrass",
-                    "Reduce": 0.8
+                    "Reduce": 0.9
                 },
                 {
                     "TileType": "Grass",
-                    "Reduce": 0.7
+                    "Reduce": 0.8
                 },
                 {
                     "TileType": "Sand",
+                    "Reduce": 0.99
+                },
+                {
+                    "TileType": "Mountain",
+                    "Reduce": 0.99
+                }
+            ]
+        },
+        {
+            "Type": "Nova.Objects.Environment.Shrub",
+            "NoiseThreshold": 0.6,
+            "PoissonThreshold": 0.9,
+            "SameTypeRadius": 2,
+            "PoissonPass": true,
+            "NoisePass": true,
+            "EligibleTileTypes": [
+                {
+                    "TileType": "LightGrass",
+                    "Reduce": 0.85
+                },
+                {
+                    "TileType": "DeadGrass",
+                    "Reduce": 0.9
+                },
+                {
+                    "TileType": "Grass",
+                    "Reduce": 0.85
+                },
+                {
+                    "TileType": "Sand",
+                    "Reduce": 0.99
+                },
+                {
+                    "TileType": "Gravel",
                     "Reduce": 0.99
                 }
             ]

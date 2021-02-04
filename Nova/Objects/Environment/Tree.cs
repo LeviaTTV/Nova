@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Nova.Common.Primitives;
 using Nova.Common.Sprite;
 using Nova.Environment;
 using Nova.Environment.Foliage;
@@ -10,85 +12,75 @@ namespace Nova.Objects.Environment
 {
     public class Tree : FoliageGameObject
     {
-        private Sprite _topLeftSprite;
-        private Sprite _topRightSprite;
-        private Sprite _bottomLeftSprite;
-        private Sprite _bottomRightSprite;
+        private Sprite _sprite;
 
-        private SpriteObject _obj;
+        private Rectangle _destinationRectangle;
+        private Vector2 _origin;
 
-        public Tree(GraphicsDevice graphicsDevice, FoliageType foliageType, Tile tile)
-            : base(graphicsDevice, foliageType, tile)
+        public Tree(GraphicsDevice graphicsDevice, Tile tile)
+            : base(graphicsDevice, tile)
         {
         }
 
         public override void LoadContent(ContentManager contentManager)
         {
-            var environmentSheet = contentManager.Load<SpriteSheet>("environmentSheet");
-            var treesSheet = contentManager.Load<SpriteSheet>("treesSheet");
+            string name = Tile.TileType switch
+            {
+                TileType.Sand => "Dead",
+                TileType.LightGrass => "Green",
+                TileType.Grass => "Pale",
+                TileType.DeadGrass => "Brown",
+                TileType.Gravel => "Dead",
+                TileType.Mountain => "Dead",
+                _ => null
+            };
+
+            var treesSheet = contentManager.Load<SpriteSheet>("Environment/Trees/Trees" + name);
 
 
             var rand = new Random(Guid.NewGuid().GetHashCode());
 
-
-            var rect = new Rectangle[]
+            var exclude = new string[]
             {
-                new Rectangle(4 * 32, 3 * 32, 32 * 3, 32 * 4),
-                new Rectangle(7 * 32, 3 * 32, 32 * 3, 32 * 4),
-                new Rectangle(10 * 32, 3 * 32, 32 * 3, 32 * 4),
+                "713",
+                "722",
+                "730",
+                "897",
+                "730",
+                "544",
+                "456",
+                "117",
+                "251",
+                "24",
+                "68",
+                "69",
+                "70",
+                "71",
+                "72",
+                "73",
+                "74",
+                "65",
+                "66",
+                "67",
+                "1",
+                "3",
+                "5",
+                "7",
+                "9"
             };
+            var potentialTrees = treesSheet.Sprites.Where(x => !exclude.Contains(x.Key)).ToList();
+            _sprite = potentialTrees[rand.Next(0, potentialTrees.Count)].Value;
 
-            var finalRect = rect[rand.Next(0, rect.Length)];
 
-
-            if (FoliageType == FoliageType.LightGreenTree)
-            {
-                /*_topLeftSprite = environmentSheet["9"];
-                _topRightSprite = environmentSheet["10"];
-                _bottomLeftSprite = environmentSheet["17"];
-                _bottomRightSprite = environmentSheet["18"];*/
-                _obj = treesSheet.CreateSpriteObject(finalRect);
-            }
-            else if (FoliageType == FoliageType.GreenTree)
-            {
-                _topLeftSprite = environmentSheet["11"];
-                _topRightSprite = environmentSheet["12"];
-                _bottomLeftSprite = environmentSheet["19"];
-                _bottomRightSprite = environmentSheet["20"];
-            }
-            else if (FoliageType == FoliageType.BrownTree)
-            {
-                _topLeftSprite = environmentSheet["13"];
-                _topRightSprite = environmentSheet["14"];
-                _bottomLeftSprite = environmentSheet["21"];
-                _bottomRightSprite = environmentSheet["22"];
-            }
-            else if (FoliageType == FoliageType.DeadTree)
-            {
-                _topLeftSprite = environmentSheet["15"];
-                _topRightSprite = environmentSheet["16"];
-                _bottomLeftSprite = environmentSheet["23"];
-                _bottomRightSprite = environmentSheet["24"];
-            }
+            // Precalculate position and origin
+            var position = new Vector2(Tile.X * 32, Tile.Y * 32);
+            _destinationRectangle = new Rectangle((int) position.X, (int) position.Y, (int) _sprite.Width, (int) _sprite.Height);
+            _origin = new Vector2(_sprite.Width / 2f - 16, _sprite.Height - 32);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            var position = new Vector2(Tile.X * 32, Tile.Y * 32);
-
-            if (_obj != null)
-            {
-                //spriteBatch.Draw(_obj.Texture, position, Color.White);
-                _obj.Draw(spriteBatch, position);
-            }
-            else
-            {
-                _bottomLeftSprite.Draw(spriteBatch, position);
-                _bottomRightSprite.Draw(spriteBatch, position + new Vector2(32, 0));
-
-                _topLeftSprite.Draw(spriteBatch, position + new Vector2(0, -32));
-                _topRightSprite.Draw(spriteBatch, position + new Vector2(32, -32));
-            }
+            spriteBatch.Draw(_sprite.Texture, _destinationRectangle, _sprite.SourceRectangle, Color.White, 0f, _origin, SpriteEffects.None, 0);
         }
     }
 }

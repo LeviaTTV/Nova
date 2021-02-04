@@ -8,32 +8,33 @@ using Nova.Environment.Foliage;
 
 namespace Nova.Objects.Environment
 {
-    public class Grass : FoliageGameObject
+    public class Shrub : FoliageGameObject
     {
         private Sprite _sprite;
 
-        public Grass(GraphicsDevice graphicsDevice, Tile tile)
+        public Shrub(GraphicsDevice graphicsDevice, Tile tile)
             : base(graphicsDevice, tile)
         {
         }
 
         public override void LoadContent(ContentManager contentManager)
         {
-            var sheet = contentManager.Load<SpriteSheet>("Environment/Terrain/BaseTerrain");
+            var sheet = contentManager.Load<SpriteSheet>("Environment/Plants/FoliagePlants");
 
-            string[] potentialGrass = Tile.TileType switch
+            string[] potentialShrubs = Tile.TileType switch
             {
-                TileType.LightGrass => new[] { "49", "50", "53", "54", "55", "56" },
-                TileType.Grass => new[] { "49", "50", "53", "54", "55", "56" },
-                TileType.DeadGrass => new[] { "51", "52" },
-                TileType.Sand => new[] { "51", "52" },
-                TileType.Gravel => new[] { "51", "52" },
+                TileType.LightGrass => new []{ "359", "361", "363" },
+                TileType.Grass => new[] { "391", "393", "395", "413" },
+                TileType.DeadGrass => new [] { "365", "327" },
+                TileType.Sand => new [] { "365", "327" },
+                TileType.Gravel => new[] { "365", "327" },
                 _ => null
             };
 
             var rand = new Random(Guid.NewGuid().GetHashCode());
 
-            _sprite = sheet[potentialGrass[rand.Next(0, potentialGrass.Length)]];
+            _sprite = sheet[potentialShrubs[rand.Next(0, potentialShrubs.Length)]];
+
         }
 
         public override void Draw(SpriteBatch spriteBatch)

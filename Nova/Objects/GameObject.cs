@@ -24,13 +24,11 @@ namespace Nova.Objects
     public class FoliageGameObject : GameObject
     {
         protected readonly GraphicsDevice GraphicsDevice;
-        public readonly FoliageType FoliageType;
         public readonly Tile Tile;
 
-        public FoliageGameObject(GraphicsDevice graphicsDevice, FoliageType foliageType, Tile tile)
+        public FoliageGameObject(GraphicsDevice graphicsDevice, Tile tile)
         {
             GraphicsDevice = graphicsDevice;
-            FoliageType = foliageType;
             Tile = tile;
         }
     }

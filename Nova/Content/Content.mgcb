@@ -15,6 +15,57 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin Environment/Plants/FoliagePlants.nvs
+/importer:SpriteSheetImporter
+/processor:SpriteSheetProcessor
+/build:Environment/Plants/FoliagePlants.nvs
+
+#begin Environment/Plants/FoliagePlantsTexture.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Environment/Plants/FoliagePlantsTexture.png
+
+#begin Environment/Terrain/BaseTerrain.nvs
+/importer:SpriteSheetImporter
+/processor:SpriteSheetProcessor
+/build:Environment/Terrain/BaseTerrain.nvs
+
+#begin Environment/Terrain/BaseTerrainTexture.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Environment/Terrain/BaseTerrainTexture.png
+
+#begin Environment/Terrain/BaseWater.nvs
+/importer:SpriteSheetImporter
+/processor:SpriteSheetProcessor
+/build:Environment/Terrain/BaseWater.nvs
+
+#begin Environment/Terrain/BaseWaterTexture.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Environment/Terrain/BaseWaterTexture.png
+
 #begin Environment/Trees/TreesBrown.nvs
 /importer:SpriteSheetImporter
 /processor:SpriteSheetProcessor
