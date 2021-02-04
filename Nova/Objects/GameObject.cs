@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Nova.Environment;
@@ -11,13 +8,13 @@ using IUpdateable = Nova.Common.Sprite.IUpdateable;
 
 namespace Nova.Objects
 {
-    public class GameObject : IDrawable, IUpdateable
+    public class GameObject
     {
         public virtual void LoadContent(ContentManager contentManager)
         {
         }
 
-        public virtual void Draw(SpriteBatch spriteBatch, Vector2 position, float rotation = default(float))
+        public virtual void Draw(SpriteBatch spriteBatch)
         {
         }
 

@@ -1,18 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.IO;
-using System.Linq;
-using System.Numerics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Newtonsoft.Json.Linq;
-using Nova.Common.Extensions;
 using Nova.Common.Sprite;
-using Nova.Content.Pipeline;
 using Nova.Environment;
-using Nova.Objects;
 using Penumbra;
 using Vector2 = Microsoft.Xna.Framework.Vector2;
 

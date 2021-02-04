@@ -15,131 +15,22 @@
 
 #---------------------------------- Content ---------------------------------#
 
-#begin CircleMask.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:CircleMask.png
-
-#begin CircleMaskInverted.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:CircleMaskInverted.png
-
-#begin DefaultFont.spritefont
+#begin Fonts/Arial8.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
 /processorParam:PremultiplyAlpha=True
 /processorParam:TextureFormat=Compressed
-/build:DefaultFont.spritefont
+/build:Fonts/Arial8.spritefont
 
-#begin environment.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:environment.png
-
-#begin environmentSheet.nvs
-/importer:SpriteSheetImporter
-/processor:SpriteSheetProcessor
-/build:environmentSheet.nvs
-
-#begin example.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:example.png
-
-#begin exampleSheet.nvs
-/importer:SpriteSheetImporter
-/processor:SpriteSheetProcessor
-/build:exampleSheet.nvs
-
-#begin FoliageMappings.json
+#begin Settings/FoliageMappings.json
 /importer:JsonImporter
 /processor:PassThroughProcessor
-/build:FoliageMappings.json
+/build:Settings/FoliageMappings.json
 
-#begin lpcEnvironment.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:lpcEnvironment.png
-
-#begin lpcEnvironmentSheet.nvs
-/importer:SpriteSheetImporter
-/processor:SpriteSheetProcessor
-/build:lpcEnvironmentSheet.nvs
-
-#begin plants.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:plants.png
-
-#begin plantsSheet.nvs
-/importer:SpriteSheetImporter
-/processor:SpriteSheetProcessor
-/build:plantsSheet.nvs
-
-#begin rain.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:rain.png
-
-#begin rainSheet.nvas
-/importer:AnimatedSpriteSheetImporter
-/processor:AnimatedSpriteSheetProcessor
-/build:rainSheet.nvas
-
-#begin TileMappings.json
+#begin Settings/TileMappings.json
 /importer:JsonImporter
 /processor:PassThroughProcessor
-/build:TileMappings.json
+/build:Settings/TileMappings.json
 
 #begin TileTransitionMasks/E-1.png
 /importer:TextureImporter
@@ -429,102 +320,6 @@
 /processorParam:TextureFormat=Color
 /build:TileTransitionMasks/SW-3.png
 
-#begin TileTransitionMasks/TestEast.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:TileTransitionMasks/TestEast.png
-
-#begin TileTransitionMasks/TestNorth.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:TileTransitionMasks/TestNorth.png
-
-#begin TileTransitionMasks/TestNorthEast.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:TileTransitionMasks/TestNorthEast.png
-
-#begin TileTransitionMasks/TestNorthWest.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:TileTransitionMasks/TestNorthWest.png
-
-#begin TileTransitionMasks/TestSouth.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:TileTransitionMasks/TestSouth.png
-
-#begin TileTransitionMasks/TestSouthEast.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:TileTransitionMasks/TestSouthEast.png
-
-#begin TileTransitionMasks/TestSouthWest.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:TileTransitionMasks/TestSouthWest.png
-
-#begin TileTransitionMasks/TestWest.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:TileTransitionMasks/TestWest.png
-
 #begin TileTransitionMasks/W-1.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -572,55 +367,4 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:TileTransitionMasks/W-4.png
-
-#begin TopToBottomMask.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:TopToBottomMask.png
-
-#begin trees.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:trees.png
-
-#begin treesSheet.nvs
-/importer:SpriteSheetImporter
-/processor:SpriteSheetProcessor
-/build:treesSheet.nvs
-
-#begin treesTest.nvs
-/importer:SpriteSheetImporter
-/processor:SpriteSheetProcessor
-/build:treesTest.nvs
-
-#begin waterTransitions.png
-/importer:TextureImporter
-/processor:TextureProcessor
-/processorParam:ColorKeyColor=255,0,255,255
-/processorParam:ColorKeyEnabled=True
-/processorParam:GenerateMipmaps=False
-/processorParam:PremultiplyAlpha=True
-/processorParam:ResizeToPowerOfTwo=False
-/processorParam:MakeSquare=False
-/processorParam:TextureFormat=Color
-/build:waterTransitions.png
-
-#begin waterTransitionsSheet.nvs
-/importer:SpriteSheetImporter
-/processor:SpriteSheetProcessor
-/build:waterTransitionsSheet.nvs
 

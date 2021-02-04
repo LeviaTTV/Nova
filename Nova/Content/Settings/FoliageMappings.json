@@ -1,0 +1,56 @@
+﻿{
+    "Foliage": [
+        {
+            "Type": "Nova.Objects.Environment.Grass",
+            "NoiseThreshold": 0.1,
+            "PoissonThreshold": 0.4,
+            "SameTypeRadius": 0,
+            "PoissonPass": true,
+            "NoisePass": true,
+            "EligibleTileTypes": [
+                {
+                    "TileType": "LightGrass",
+                    "Reduce": 0.5
+                },
+                {
+                    "TileType": "DeadGrass",
+                    "Reduce": 0.8
+                },
+                {
+                    "TileType": "Grass",
+                    "Reduce": 0.6
+                },
+                {
+                    "TileType": "Sand",
+                    "Reduce": 0.95
+                }
+            ]
+        },
+        {
+            "Type": "Nova.Objects.Environment.Grass",
+            "NoiseThreshold": 0.5,
+            "PoissonThreshold": 0.7,
+            "SameTypeRadius": 2,
+            "PoissonPass": true,
+            "NoisePass": true,
+            "EligibleTileTypes": [
+                {
+                    "TileType": "LightGrass",
+                    "Reduce": 0.6
+                },
+                {
+                    "TileType": "DeadGrass",
+                    "Reduce": 0.8
+                },
+                {
+                    "TileType": "Grass",
+                    "Reduce": 0.7
+                },
+                {
+                    "TileType": "Sand",
+                    "Reduce": 0.99
+                }
+            ]
+        }
+    ] 
+}

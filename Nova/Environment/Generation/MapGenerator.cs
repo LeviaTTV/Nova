@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Reflection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -76,7 +74,7 @@ namespace Nova.Environment
             foreach (var foliageMapping in _foliageMappings.Foliage.Where(x => x.NoisePass).OrderByDescending(x => x.NoiseThreshold))
             {
                 var eligibleTileTypes = foliageMapping.EligibleTileTypes.Select(x => x.TileType);
-                var eligibleTiles = map.Tiles.Where(x => eligibleTileTypes.Contains(x.Value.TileType) && x.Value.Foliage == FoliageType.None);
+                var eligibleTiles = map.Tiles.Where(x => eligibleTileTypes.Contains(x.Value.TileType) && x.Value.FoliageType == null);
 
                 foreach (var eligibleTile in eligibleTiles)
                 {
@@ -84,36 +82,9 @@ namespace Nova.Environment
 
                     if (noise > foliageMapping.NoiseThreshold)
                     {
-                        int startX = eligibleTile.Key.X - foliageMapping.SameTypeRadius;
-                        int endX = eligibleTile.Key.X + foliageMapping.SameTypeRadius;
-                        int startY = eligibleTile.Key.Y - foliageMapping.SameTypeRadius;
-                        int endY = eligibleTile.Key.Y + foliageMapping.SameTypeRadius;
-
-
-                        bool allow = true;
-                        for (int x = startX; x < endX; x++)
-                        {
-                            for (int y = startY; y < endY; y++)
-                            {
-                                if (map.Tiles.TryGetValue(new TileCoordinate(x, y), out var tile))
-                                {
-                                    if (tile.Foliage == foliageMapping.Type)
-                                    {
-                                        allow = false;
-                                        break;
-                                    }
-                                }
-                            }
-
-                            if (!allow)
-                                break;
-                        }
-
-                        if (!allow)
+                        if (!IsFoliageTypeAllowed(map, eligibleTile.Value, foliageMapping))
                             continue;
                         
-                        if (!foliageMapping.AllowOnTransition && eligibleTile.Value.TileBlending != 0)
-                            continue;
 
                         var eligibleTileType = foliageMapping.EligibleTileTypes.FirstOrDefault(x => x.TileType == eligibleTile.Value.TileType);
                         if (eligibleTileType == null)
@@ -126,34 +97,16 @@ namespace Nova.Environment
                                 continue;
                         }
 
-                        eligibleTile.Value.Foliage = foliageMapping.Type;
-
-                        if (foliageMapping.Sprite?.RandomSprite != null)
-                            eligibleTile.Value.Variant = rand.Next(0, foliageMapping.Sprite.RandomSprite.Length);
-
-                        if (foliageMapping.GameObject != null)
-                        {
-                            var gameObject = (FoliageGameObject)Activator.CreateInstance(Type.GetType(foliageMapping.GameObject), new object[]
-                            {
-                                _device,
-                                foliageMapping.Type,
-                                eligibleTile.Value
-                            });
-
-                            _gameObjects.Add(gameObject);
-
-                            eligibleTile.Value.GameObject = true;
-                        }
+                        ApplyFoliageToTile(eligibleTile.Value, foliageMapping);
                     }
                 }
             }
 
-            var disc = new PoissonDiscSampler(map.Width, map.Height, 2);
-
-            foreach (var loc in disc.Samples())
+            var poissonDiscSamples = new PoissonDiscSampler(map.Width, map.Height, 1).Samples().Select(x => new TileCoordinate((int)x.X, (int)x.Y));
+            foreach (var tileCoordinate in poissonDiscSamples)
             {
-                var tile = map.Tiles[new TileCoordinate((int)loc.X, (int)loc.Y)];
-                if (tile.Foliage != FoliageType.None)
+                var tile = map.Tiles[tileCoordinate];
+                if (tile.FoliageType != null)
                     continue;
 
                 foreach (var foliageMapping in _foliageMappings.Foliage.Where(x => x.PoissonPass && x.EligibleTileTypes.Any(z => z.TileType == tile.TileType)).OrderByDescending(x => x.PoissonThreshold))
@@ -162,67 +115,58 @@ namespace Nova.Environment
 
                     if (rand.NextDouble() < foliageMapping.PoissonThreshold || rand.NextDouble() < eligibleTileType.Reduce)
                         continue;
-
-                    int startX = tile.X - foliageMapping.SameTypeRadius;
-                    int endX = tile.X + foliageMapping.SameTypeRadius;
-                    int startY = tile.Y - foliageMapping.SameTypeRadius;
-                    int endY = tile.Y + foliageMapping.SameTypeRadius;
-
-
-                    bool allow = true;
-                    for (int x = startX; x < endX; x++)
-                    {
-                        for (int y = startY; y < endY; y++)
-                        {
-                            if (map.Tiles.TryGetValue(new TileCoordinate(x, y), out var testTile))
-                            {
-                                if (testTile.Foliage == foliageMapping.Type)
-                                {
-                                    allow = false;
-                                    break;
-                                }
-                            }
-                        }
-
-                        if (!allow)
-                            break;
-                    }
-
-                    if (!allow)
+                    
+                    if (!IsFoliageTypeAllowed(map, tile, foliageMapping))
                         continue;
-
-                    if (!foliageMapping.AllowOnTransition && tile.TileBlending != 0)
-                        continue;
-
-                    tile.Foliage = foliageMapping.Type;
-
-                    if (foliageMapping.Sprite?.RandomSprite != null)
-                        tile.Variant = rand.Next(0, foliageMapping.Sprite.RandomSprite.Length);
-
-                    if (foliageMapping.GameObject != null)
-                    {
-                        var gameObject = (FoliageGameObject)Activator.CreateInstance(Type.GetType(foliageMapping.GameObject), new object[]
-                        {
-                            _device,
-                            foliageMapping.Type,
-                            tile
-                        });
-
-                        _gameObjects.Add(gameObject);
-
-                        tile.GameObject = true;
-                    }
-
-
+                    
+                    ApplyFoliageToTile(tile, foliageMapping);
                     break;
                 }
             }
         }
 
+        private bool IsFoliageTypeAllowed(Map map, Tile tile, FoliageMapping mapping)
+        {
+            if (!mapping.AllowOnTransition && tile.TileBlending != 0)
+                return false;
+
+            int startX = tile.X - mapping.SameTypeRadius;
+            int endX = tile.X + mapping.SameTypeRadius;
+            int startY = tile.Y - mapping.SameTypeRadius;
+            int endY = tile.Y + mapping.SameTypeRadius;
+
+            
+            for (int x = startX; x < endX; x++)
+            {
+                for (int y = startY; y < endY; y++)
+                {
+                    if (map.Tiles.TryGetValue(new TileCoordinate(x, y), out var testTile))
+                    {
+                        if (tile.FoliageType == mapping.Type)
+                            return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        private void ApplyFoliageToTile(Tile tile, FoliageMapping mapping)
+        {
+            tile.FoliageType = mapping.Type;
+
+            var gameObject = (FoliageGameObject)Activator.CreateInstance(Type.GetType(mapping.Type), new object[]
+            {
+                _device,
+                tile
+            });
+
+            _gameObjects.Add(gameObject);
+        }
+
         private void PreloadSpriteSheets()
         {
             var list = _tileMappings.Mappings.Select(x => x.Sheet).ToList();
-            list.AddRange(_foliageMappings.Foliage.Where(x => x.Sprite != null).Select(x => x.Sprite.Sheet));
 
             foreach (var uniqueSheet in list.Distinct())
             {

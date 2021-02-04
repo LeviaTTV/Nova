@@ -1,11 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Nova.Environment.Foliage;
-using Nova.Objects;
 
 namespace Nova.Environment
 {
@@ -27,9 +23,7 @@ namespace Nova.Environment
             return x >= bounds.X && x <= bounds.X + bounds.Width &&
                    y >= bounds.Y && y <= bounds.Y + bounds.Height;
         }
-
-        public FoliageType Foliage { get; set; }
-        public int Variant { get; set; }
-        public bool GameObject { get; set; }
+        
+        public string FoliageType { get; set; }
     }
 }

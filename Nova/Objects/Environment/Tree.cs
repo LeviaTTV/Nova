@@ -1,19 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Nova.Common;
 using Nova.Common.Sprite;
 using Nova.Environment;
 using Nova.Environment.Foliage;
-using IDrawable = Nova.Common.Sprite.IDrawable;
-using IUpdateable = Nova.Common.Sprite.IUpdateable;
 
-namespace Nova.Objects
+namespace Nova.Objects.Environment
 {
     public class Tree : FoliageGameObject
     {
@@ -79,9 +72,9 @@ namespace Nova.Objects
             }
         }
 
-        public override void Draw(SpriteBatch spriteBatch, Vector2 position, float rotation = default(float))
+        public override void Draw(SpriteBatch spriteBatch)
         {
-            position = new Vector2(Tile.X * 32, Tile.Y * 32);
+            var position = new Vector2(Tile.X * 32, Tile.Y * 32);
 
             if (_obj != null)
             {
