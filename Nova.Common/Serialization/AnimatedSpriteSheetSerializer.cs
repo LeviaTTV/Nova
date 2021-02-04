@@ -29,8 +29,9 @@ namespace Nova.Common.Sprite
             offset += stream.WriteUInt16((ushort)obj.SpriteCount);
 
             ushort count = 0;
-            foreach (var sprite in obj.Sprites)
+            foreach (var spriteEntry in obj.Sprites)
             {
+                var sprite = spriteEntry.Value;
                 ++count;
                 offset += stream.WriteUInt16(count);
                 offset += stream.WriteStringWithLength(sprite.Name);
@@ -71,7 +72,7 @@ namespace Nova.Common.Sprite
                 sprite.X = stream.ReadUInt16();
                 sprite.Y = stream.ReadUInt16();
 
-                spriteSheet.Sprites.Add(sprite);
+                spriteSheet.Sprites[sprite.Name] = sprite;
             }
 
 
@@ -85,7 +86,7 @@ namespace Nova.Common.Sprite
             spriteSheet.Texture = Texture2D.FromStream(device, memoryStream);
 
             foreach (var sprite in spriteSheet.Sprites)
-                sprite.Texture = spriteSheet.Texture;
+                sprite.Value.Texture = spriteSheet.Texture;
 
             memoryStream.Dispose();
 

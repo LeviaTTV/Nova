@@ -8,6 +8,6 @@ namespace Nova.Common.Sprite
 {
     public interface IDrawable
     {
-        void Draw(SpriteBatch spriteBatch, Vector2 position);
+        void Draw(SpriteBatch spriteBatch, Vector2 position, float rotation = default(float));
     }
 }

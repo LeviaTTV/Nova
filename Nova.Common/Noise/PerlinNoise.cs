@@ -148,6 +148,41 @@ namespace Nova.Common.Noise
             return To2D<float>(perlinNoise);
         }
 
+        public float GeneratePerlinNoise(float[][] baseNoise, int octaveCount, int x, int y)
+        {
+            int width = baseNoise.Length;
+            int height = baseNoise[0].Length;
+
+            float[][][] smoothNoise = new float[octaveCount][][]; //an array of 2D arrays containing
+
+            float persistance = 0.5f;
+
+            //generate smooth noise
+            for (int i = 0; i < octaveCount; i++)
+            {
+                smoothNoise[i] = GenerateSmoothNoise(baseNoise, i);
+            }
+
+            //float[][] perlinNoise = GetEmptyArray(width, height);
+            var noise = 0f;
+            float amplitude = 1.0f;
+            float totalAmplitude = 0.0f;
+
+            //blend noise together
+            for (int octave = octaveCount - 1; octave >= 0; octave--)
+            {
+                amplitude *= persistance;
+                totalAmplitude += amplitude;
+
+                noise += smoothNoise[octave][x][y] * amplitude;
+            }
+
+            //normalisation
+            noise /= totalAmplitude;
+
+            return noise;
+        }
+
         public float[,] Generate(int seed, int width, int height)
         {
             return GeneratePerlinNoise(GenerateWhiteNoise(width, height, seed), 8);

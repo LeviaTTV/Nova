@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Mime;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -18,16 +19,25 @@ namespace Nova.Common.Sprite
         public int Width { get; protected set; }
 
         public Texture2D Texture { get; set; }
-
-        public List<Sprite> Sprites { get; protected set; } = new List<Sprite>();
+        
+        public Dictionary<string, Sprite> Sprites { get; protected set; } = new Dictionary<string, Sprite>();
 
         public string AssetName { get; set; }
 
-        public virtual void Draw(SpriteBatch spriteBatch, Vector2 position)
+        public virtual void Draw(SpriteBatch spriteBatch, Vector2 position, float rotation = default(float))
         {
             spriteBatch.Draw(Texture, position, Color.White);
         }
 
-        public Sprite this[string name] => Sprites.FirstOrDefault(x => x.Name.Equals(name));
+        public Sprite this[string name] => Sprites[name];
+
+        public SpriteObject CreateSpriteObject(Rectangle sourceRectangle)
+        {
+            var spriteObj = new SpriteObject();
+            spriteObj.Texture = Texture;
+            spriteObj.SourceRectangle = sourceRectangle;
+
+            return spriteObj;
+        }
     }
 }

@@ -34,13 +34,13 @@ namespace Nova.Content.Pipeline.SpriteSheet
                 sprite.X = input.ReadUInt16();
                 sprite.Y = input.ReadUInt16();
 
-                spriteSheet.Sprites.Add(sprite);
+                spriteSheet.Sprites[sprite.Name] = sprite;
             }
 
             spriteSheet.Texture = input.ContentManager.Load<Texture2D>(spriteSheet.AssetName);
 
             foreach (var sprite in spriteSheet.Sprites)
-                sprite.Texture = spriteSheet.Texture;
+                sprite.Value.Texture = spriteSheet.Texture;
 
             return spriteSheet;
         }

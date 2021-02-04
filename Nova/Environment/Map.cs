@@ -1,19 +1,31 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Nova.Objects;
 
 namespace Nova.Environment
 {
     public class Map
     {
-        public int ChunkSize { get; set; }
-        public List<Chunk> Chunks { get; } = new List<Chunk>();
+        public float[,] MapData { get; set; }
+        public int Height { get; set; }
+        public int Width { get; set; }
 
-        public Chunk this[int x, int y]
+        public int TileWidth { get; set; }
+        public int TileHeight { get; set; }
+
+        public Dictionary<TileCoordinate, Tile> Tiles { get; set; }
+        public List<GameObject> GameObjects { get; set; }
+    }
+
+    public struct TileCoordinate
+    {
+        public int X { get; set; }
+        public int Y { get; set; }
+
+        public TileCoordinate(int x, int y)
         {
-            get
-            {
-                return Chunks.FirstOrDefault(z => z.X == x && z.Y == y);
-            }
+            X = x;
+            Y = y;
         }
     }
 }

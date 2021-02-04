@@ -22,23 +22,35 @@ namespace Editor
         // This very much breaks the mvvm principe but it's just faster right now..
         private void UIElement_OnMouseWheel(object sender, MouseWheelEventArgs e)
         {
-            ((MainWindowViewModel) this.DataContext).MouseWheelEvent(e);
+            ((MainWindowViewModel)this.DataContext).MouseWheelEvent(e);
         }
+
+
+        private Point _startPosition;
+        private Point _endPosition;
 
         private void UIElement_OnMouseMove(object sender, MouseEventArgs e)
         {
             if (_isDragging)
             {
                 var relativePosition = e.GetPosition(MonoGameContentControl);
-                if (_previousPosition != default(Point))
+                if (!Keyboard.IsKeyDown(Key.LeftCtrl))
                 {
-                    var delta = Point.Subtract(relativePosition, _previousPosition);
+                    if (_previousPosition != default(Point))
+                    {
+                        var delta = Point.Subtract(relativePosition, _previousPosition);
 
 
-                    ((MainWindowViewModel)this.DataContext).Move(delta.X, delta.Y);
+                        ((MainWindowViewModel)this.DataContext).Move(delta.X, delta.Y);
+                    }
+
+                    _previousPosition = relativePosition;
                 }
+                else
+                {
 
-                _previousPosition = relativePosition;
+                    ((MainWindowViewModel) this.DataContext).TransformSelection(_startPosition.X, _startPosition.Y, relativePosition.X, relativePosition.Y);
+                }
             }
         }
 
@@ -46,11 +58,23 @@ namespace Editor
         {
             _isDragging = true;
             _previousPosition = e.GetPosition(MonoGameContentControl);
+
+            if (Keyboard.IsKeyDown(Key.LeftCtrl))
+            {
+                _startPosition = _previousPosition;
+            }
         }
 
         private void UIElement_OnMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             _isDragging = false;
+
+            if (Keyboard.IsKeyDown(Key.LeftCtrl))
+            {
+                _endPosition = e.GetPosition(MonoGameContentControl);
+
+                ((MainWindowViewModel)this.DataContext).Select(_startPosition.X, _startPosition.Y, _endPosition.X, _endPosition.Y);
+            }
         }
 
         private void Selector_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -59,7 +83,7 @@ namespace Editor
             {
                 if (tabControl.SelectedIndex == 0)
                 {
-                    ((MainWindowViewModel) this.DataContext).ActivateSpriteTab();
+                    ((MainWindowViewModel)this.DataContext).ActivateSpriteTab();
                 }
                 else if (tabControl.SelectedIndex == 1)
                 {

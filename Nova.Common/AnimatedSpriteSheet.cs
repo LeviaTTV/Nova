@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -30,6 +31,8 @@ namespace Nova.Common.Sprite
         [JsonIgnore]
         private double _accumulator;
 
+        private List<Sprite> _sprites;
+
         public AnimatedSpriteSheet()
         {
         }
@@ -50,12 +53,16 @@ namespace Nova.Common.Sprite
         public void Start()
         {
             _running = true;
+            _sprites = Sprites.Values.ToList();
         }
 
         public void Update(GameTime gameTime)
         {
             if (!_running)
                 return;
+
+            if (_sprites == null && Sprites.Any())
+                _sprites = Sprites.Values.ToList();
 
             _accumulator += gameTime.ElapsedGameTime.TotalMilliseconds;
 
@@ -74,21 +81,24 @@ namespace Nova.Common.Sprite
                 {
                     CurrentIndex = 0;
                     if (ReverseAtEnd)
-                        Sprites.Reverse();
+                        _sprites.Reverse();
                 }
                 else
                     Stop();
             }
         }
 
-        public override void Draw(SpriteBatch spriteBatch, Vector2 position)
+        public override void Draw(SpriteBatch spriteBatch, Vector2 position, float rotation = default(float))
         {
             if (HasEnded)
                 return;
 
             _running = true;
 
-            var sprite = Sprites[CurrentIndex];
+            if (_sprites == null || !_sprites.Any())
+                return;
+
+            var sprite = _sprites[CurrentIndex];
             sprite.Draw(spriteBatch, position);
         }
     }

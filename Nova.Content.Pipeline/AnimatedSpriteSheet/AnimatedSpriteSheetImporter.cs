@@ -45,7 +45,7 @@ namespace Nova.Content.Pipeline.AnimatedSpriteSheet
                     sprite.X = stream.ReadUInt16();
                     sprite.Y = stream.ReadUInt16();
 
-                    spriteSheet.Sprites.Add(sprite);
+                    spriteSheet.Sprites[sprite.Name] = sprite;
                 }
             }
 

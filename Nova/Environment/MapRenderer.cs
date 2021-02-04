@@ -1,13 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Content.Pipeline.Graphics;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Graphics.PackedVector;
 using Microsoft.Xna.Framework.Input;
+using Nova.Common.Extensions;
+using Nova.Common.Primitives;
 using Nova.Common.Sprite;
-using Nova.Primitives;
+using Nova.Environment.Foliage;
+using Nova.Objects;
 
 namespace Nova.Environment
 {
@@ -15,155 +22,176 @@ namespace Nova.Environment
     {
         private readonly GraphicsDevice _device;
         private readonly Map _map;
-        private readonly MapGenerator _mapGenerator;
         private readonly Camera2D _camera2D;
-        private SpriteSheet _environmentSpriteSheet;
+        private PrimitiveRectangle _positionRectangle;
+        private PrimitiveLine _line;
+        private SpriteFont _font;
 
-        private Line _positionLine;
+        public bool DebugMode { get; set; }
+        public bool DoNotRenderTransitions { get; set; }
 
-        public MapRenderer(GraphicsDevice device, Map map, MapGenerator mapGenerator, Camera2D camera2D)
+        private Dictionary<TileType, Sprite> _tileMappings = new();
+        private Dictionary<FoliageType, Sprite[]> _foliageMappings = new();
+
+        public MapRenderer(GraphicsDevice device, Map map,Camera2D camera2D)
         {
             _device = device;
             _map = map;
-            _mapGenerator = mapGenerator;
             _camera2D = camera2D;
         }
 
         public void LoadContent(ContentManager content)
         {
-            _environmentSpriteSheet = content.Load<SpriteSheet>("environmentSheet");
+            _font = content.Load<SpriteFont>("DefaultFont");
+            _positionRectangle = new PrimitiveRectangle(_device, Color.Red);
 
-            _positionLine = new Line(_device, Color.Red);
+            var dict = new Dictionary<string, SpriteSheet>();
+
+
+            var tileMappings = content.LoadObject<TileMappings>("TileMappings");
+            var foliageMappings = content.LoadObject<FoliageMappings>("FoliageMappings");
+
+            var sheetsToLoad = tileMappings.Mappings.Select(x => x.Sheet).ToList();
+            sheetsToLoad.AddRange(foliageMappings.Foliage.Where(x => x.Sprite != null).Select(x => x.Sprite.Sheet));
+            foreach (var sheetToLoad in sheetsToLoad.Distinct())
+            {
+                var sheet = content.Load<SpriteSheet>(sheetToLoad);
+                dict[sheetToLoad] = sheet;
+            }
+
+            foreach (var spriteMapping in tileMappings.Mappings)
+            {
+                _tileMappings[spriteMapping.TileType] = dict[spriteMapping.Sheet][spriteMapping.Sprite];
+            }
+
+            foreach (var foliageMapping in foliageMappings.Foliage.Where(x => x.Sprite != null))
+            {
+                if (foliageMapping.Sprite.Sprite != null)
+                    _foliageMappings[foliageMapping.Type] = new Sprite[1] { dict[foliageMapping.Sprite.Sheet][foliageMapping.Sprite.Sprite] };
+                else
+                {
+                    _foliageMappings[foliageMapping.Type] = new Sprite[foliageMapping.Sprite.RandomSprite.Length];
+
+                    int count = 0;
+                    foreach (var potentialSprite in foliageMapping.Sprite.RandomSprite)
+                    {
+                        _foliageMappings[foliageMapping.Type][count] = dict[foliageMapping.Sprite.Sheet][potentialSprite];
+                        ++count;
+                    }
+                }
+
+            }
+
+            _line = new PrimitiveLine(_device, Color.Red);
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            // Ignore viewport for now, later we can use it to figure out which chunks to draw where.
-            var viewport = _device.Viewport;
-            int width = viewport.Width;
-            int height = viewport.Height;
+            var rectBounds = _camera2D.VisibleArea;
+            rectBounds.X -= 32;
+            rectBounds.Y -= 32;
+            rectBounds.Width += 32;
+            rectBounds.Height += 32;
 
-            var chunks = CalculateVisibleChunks(_camera2D.Pos, _map.ChunkSize, 32);
+            var tilesToRender = _map.Tiles.Where(tile => tile.Value.InBounds(_map, rectBounds)).ToList();
 
-            var chunksToRender = new List<Chunk>();
-
-            foreach (var fakeChunk in chunks)
-            {
-                var chunk = _map[fakeChunk.x, fakeChunk.y];
-
-                if (chunk == null)
-                {
-                    var chunkToRender = _mapGenerator.Generate(_map, fakeChunk.x, fakeChunk.y);
-                    chunkToRender.PrepareChunk(_environmentSpriteSheet);
-                    chunksToRender.Add(chunkToRender);
-                }
-                else
-                    chunksToRender.Add(chunk);
-            }
+            foreach (var tile in tilesToRender)
+                DrawTile(spriteBatch, _camera2D.Position, tile.Value);
 
 
-            var renderedTilesList = new List<RenderedTile>(chunksToRender.Count * _map.ChunkSize * _map.ChunkSize);
-            foreach (var chunk in chunksToRender)
-            {
-                DrawChunk(renderedTilesList, spriteBatch, chunk, 32);
-            }
+            foreach (var gameObject in _map.GameObjects)
+                DrawGameObject(spriteBatch, gameObject);
 
-            foreach (var tile in renderedTilesList.Where(x => x.Tile.TileBlending != TileBlending.NoBlending))
-            {
-                _positionLine.Draw(spriteBatch, tile.RenderPosition + new Vector2(32, 0), tile.RenderPosition + new Vector2(32, 32), 5f);
-
-                if ((tile.Tile.TileBlending & TileBlending.Bottom) == TileBlending.Bottom)
-                {
-                    var blendSprite = tile.Tile.Sprite;
-                    var pos = tile.RenderPosition + new Vector2(0, 32);
-
-                    // Edge at pos
-                }
-            }
-
-            /*foreach (var tile in renderedTilesList)
-            {
-                var different = renderedTilesList.FirstOrDefault(x => x.X == tile.X && x.Y == tile.Y + 1 && tile.Sprite != x.Sprite);
-
-                if (different.X != 0)
-                {
-                    // Create transition
-                    _positionLine.Draw(spriteBatch, different.RenderPosition, different.RenderPosition + new Vector2(1f, 1f), 10f);
-                }
-            }*/
-
-            _positionLine.Draw(spriteBatch, _camera2D.Pos, _camera2D.Pos + new Vector2(1f, 1f), 10f);
+            _positionRectangle.Draw(spriteBatch, _camera2D.Position, 5, 5);
         }
-
-        private IEnumerable<(int x, int y)> CalculateVisibleChunks(Vector2 position, int chunkSize, int tileSize)
+        
+        private void DrawTile(SpriteBatch spriteBatch, Vector2 cameraPos, Tile tile)
         {
-            var viewport = _device.Viewport;
+            var sprite = _tileMappings[tile.TileType];
+            var position = new Vector2(tile.X * _map.TileWidth, tile.Y * _map.TileHeight);
 
-            int chunkPixelSize = chunkSize * tileSize;
+            
+            sprite.Draw(spriteBatch, position);
 
-            int chunkX = (int)(position.X / chunkPixelSize);
-            int chunkY = (int)(position.Y / chunkPixelSize);
-
-            float zoom = _camera2D.Zoom;
-
-            if (zoom < 1f)
-                zoom += 1.5f;
-
-            var viewportWidth = Math.Ceiling(viewport.Width * zoom);
-            var viewportHeight = Math.Ceiling(viewport.Height * zoom);
-
-            // Figure out how many chunks to generate around the players chunk
-            int heightAmountOfChunks = (int) Math.Ceiling(viewportHeight / (double)chunkPixelSize);
-            int widthAmountOfChunks = (int) Math.Ceiling(viewportWidth / (double)chunkPixelSize);
-
-
-            int chunkBoundX = chunkX - widthAmountOfChunks;
-            int chunkBoundXEnd = chunkX + widthAmountOfChunks;
-            int chunkBoundY = chunkY - heightAmountOfChunks;
-            int chunkBoundYEnd = chunkY + heightAmountOfChunks;
-
-            for (int x = chunkBoundX; x < chunkBoundXEnd; x++)
-            for (int y = chunkBoundY; y < chunkBoundYEnd; y++)
-                yield return (x, y);
-
-        }
-
-        private void DrawChunk(List<RenderedTile> list, SpriteBatch spriteBatch, Chunk chunk, int tileSize)
-        {
-            int pixelX = chunk.X * chunk.Width * tileSize;
-            int pixelY = chunk.Y * chunk.Height * tileSize;
-
-            int tilesX = chunk.Width;
-            int tilesY = chunk.Height;
-            for (int y = 0; y < tilesY; y++)
+            if (tile.TileBlending != 0)
             {
-                for (int x = 0; x < tilesX; x++)
+                if (!DoNotRenderTransitions && tile.BlendTextureList.Any())
                 {
-                    var tile = chunk.Tiles[x, y];
+                    foreach (var blendTexture in tile.BlendTextureList)
+                        spriteBatch.Draw(blendTexture, position, Color.White);
+                }
 
-                    int spriteX = pixelX + x * tileSize;
-                    int spriteY = pixelY + y * tileSize;
-
-                    var pos = new Vector2(spriteX, spriteY);
-                    tile.Sprite.Draw(spriteBatch, pos);
-
-                    list.Add(new RenderedTile()
+                if (DebugMode)
+                {
+                    if (tile.TileBlending.HasFlag(TileBlending.North))
                     {
-                        Tile = tile,
-                        X = x,
-                        Y = y,
-                        RenderPosition = pos
-                    });
+                        _positionRectangle.Draw(spriteBatch, position + new Vector2(16, 2), 1, 1);
+                    }
+
+                    if (tile.TileBlending.HasFlag(TileBlending.East))
+                    {
+                        _positionRectangle.Draw(spriteBatch, position + new Vector2(30, 16), 1, 1);
+                    }
+
+                    if (tile.TileBlending.HasFlag(TileBlending.South))
+                    {
+                        _positionRectangle.Draw(spriteBatch, position + new Vector2(16, 30), 1, 1);
+                    }
+
+                    if (tile.TileBlending.HasFlag(TileBlending.West))
+                    {
+                        _positionRectangle.Draw(spriteBatch, position + new Vector2(2, 16), 1, 1);
+                    }
+
+                    if (tile.TileBlending.HasFlag(TileBlending.NorthEast))
+                    {
+                        _positionRectangle.Draw(spriteBatch, position + new Vector2(30, 2), 1, 1);
+                    }
+
+                    if (tile.TileBlending.HasFlag(TileBlending.NorthWest))
+                    {
+                        _positionRectangle.Draw(spriteBatch, position + new Vector2(2, 2), 1, 1);
+                    }
+
+                    if (tile.TileBlending.HasFlag(TileBlending.SouthEast))
+                    {
+                        _positionRectangle.Draw(spriteBatch, position + new Vector2(30, 30), 1, 1);
+                    }
+
+                    if (tile.TileBlending.HasFlag(TileBlending.SouthWest))
+                    {
+                        _positionRectangle.Draw(spriteBatch, position + new Vector2(2, 30), 1, 1);
+                    }
+
+                    _line.Draw(spriteBatch, position, position + new Vector2(32, 0), 1f, Color.Red);
+                    _line.Draw(spriteBatch, position, position + new Vector2(0, 32), 1f, Color.Red);
+                    _line.Draw(spriteBatch, position + new Vector2(0, 32), position + new Vector2(32, 32), 1f, Color.Red);
+                    _line.Draw(spriteBatch, position + new Vector2(32, 0), position + new Vector2(32, 32), 1f, Color.Red);
                 }
             }
-        }
-    }
 
-    public struct RenderedTile
-    {
-        public Tile Tile { get; set; }
-        public int X { get; set; }
-        public int Y { get; set; }
-        public Vector2 RenderPosition { get; set; }
+            // Draw any foliage that is not a gameobject
+            if (tile.Foliage != FoliageType.None && !tile.GameObject)
+            {
+                var foliageSprites = _foliageMappings[tile.Foliage];
+
+                Sprite foliageSprite = foliageSprites[0];
+                if (foliageSprites.Length > 1)
+                    foliageSprite = foliageSprites[tile.Variant];
+
+
+
+                foliageSprite.Draw(spriteBatch, position);
+
+                if (DebugMode)
+                    spriteBatch.DrawString(_font, ((int)tile.Foliage).ToString(), position + new Vector2(2, 10), Color.Red);
+            }
+
+        }
+        
+        private void DrawGameObject(SpriteBatch spriteBatch, GameObject gameObject)
+        {
+            gameObject.Draw(spriteBatch, Vector2.Zero);
+        }
     }
 }

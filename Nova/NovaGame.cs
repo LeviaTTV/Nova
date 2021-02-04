@@ -1,35 +1,44 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Linq;
 using System.Numerics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Newtonsoft.Json.Linq;
+using Nova.Common.Extensions;
 using Nova.Common.Sprite;
+using Nova.Content.Pipeline;
 using Nova.Environment;
-using Nova.Primitives;
+using Nova.Objects;
+using Penumbra;
 using Vector2 = Microsoft.Xna.Framework.Vector2;
 
 namespace Nova
 {
     public class NovaGame : Game
     {
-        private GraphicsDeviceManager _graphics;
+        private readonly GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
         private Map _map;
         private MapRenderer _mapRenderer;
 
-        private int _cumulativeScrollWheelValue = 0;
-
         private Camera2D _camera2D;
+
+        private PenumbraComponent _penumbra;
 
         public NovaGame()
         {
             _graphics = new GraphicsDeviceManager(this);
+            _graphics.PreferHalfPixelOffset = true;
             Content.RootDirectory = "Content";
             
             IsMouseVisible = true;
+
+            _penumbra = new PenumbraComponent(this);
         }
 
         protected override void Initialize()
@@ -40,71 +49,56 @@ namespace Nova
             _graphics.PreferredBackBufferHeight = 1080;
             _graphics.PreferMultiSampling = true;
             _graphics.ApplyChanges();
+
+            _penumbra.Initialize();
+            _penumbra.AmbientColor = Color.FromNonPremultiplied(255, 255, 255, 255);
         }
 
         protected override void LoadContent()
         {
             _spriteBatch = new SpriteBatch(GraphicsDevice);
+            _camera2D = new Camera2D(GraphicsDevice.Viewport);
+            
+            var mapGenerator = new MapGenerator(GraphicsDevice, Guid.NewGuid().GetHashCode(), Content);
+            _map = mapGenerator.Generate(400, 400);
 
-            _camera2D = new Camera2D(GraphicsDevice.Viewport, int.MaxValue, int.MaxValue, 1f);
+            foreach (var gameObj in _map.GameObjects)
+                gameObj.LoadContent(Content);
 
-
-
-            // Generate a chunk in our new map
-            var mapGenerator = new MapGenerator(GraphicsDevice, 8);
-            _map = new Map()
-            {
-                ChunkSize = mapGenerator.ChunkSize
-            };
-
-            _mapRenderer = new MapRenderer(GraphicsDevice, _map, mapGenerator, _camera2D);
+            _mapRenderer = new MapRenderer(GraphicsDevice, _map, _camera2D);
             _mapRenderer.LoadContent(Content);
+
+            _ds = Content.Load<SpriteSheet>("treesTest");
         }
+
+        private SpriteSheet _ds;
 
         protected override void Update(GameTime gameTime)
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            var mouseState = Mouse.GetState();
+            _camera2D.UpdateCamera(GraphicsDevice.Viewport);
 
-            int mouseWheelValue = mouseState.ScrollWheelValue;
-            if (mouseWheelValue != _cumulativeScrollWheelValue)
-            {
-                if (mouseWheelValue < _cumulativeScrollWheelValue)
-                    //_scale -= 0.1f;
-                    _camera2D.Zoom += 0.1f;
-                else
-                    //_scale += 0.1f;
-                    _camera2D.Zoom -= 0.1f;
-            }
-
-            _cumulativeScrollWheelValue = mouseWheelValue;
-
-            var keyboardState = Keyboard.GetState();
-
-            Vector2 movement = Vector2.Zero;
-            if (keyboardState.IsKeyDown(Keys.A))
-                movement.X--;
-            if (keyboardState.IsKeyDown(Keys.D))
-                movement.X++;
-            if (keyboardState.IsKeyDown(Keys.W))
-                movement.Y--;
-            if (keyboardState.IsKeyDown(Keys.S))
-                movement.Y++;
-
-            _camera2D.Pos += movement * 20;
+            _mapRenderer.DebugMode = Keyboard.GetState().IsKeyDown(Keys.E);
+            _mapRenderer.DoNotRenderTransitions = Keyboard.GetState().IsKeyDown(Keys.R);
+            
+            _penumbra.Transform = _camera2D.Transform;
         }
 
         protected override void Draw(GameTime gameTime)
         {
+            _penumbra.BeginDraw();
+            
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            _spriteBatch.Begin(sortMode: SpriteSortMode.Texture, samplerState: SamplerState.PointClamp, transformMatrix: _camera2D.GetTransformation());
-
+            _spriteBatch.Begin(sortMode: SpriteSortMode.Deferred, samplerState: SamplerState.PointClamp, transformMatrix: _camera2D.Transform);
             _mapRenderer.Draw(_spriteBatch);
-
+            _ds["Tree1"].Draw(_spriteBatch, Vector2.One);
             _spriteBatch.End();
+
+
+            _penumbra.Draw(gameTime);
         }
     }
 }

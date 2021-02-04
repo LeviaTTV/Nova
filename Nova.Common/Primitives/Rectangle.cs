@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Nova.Primitives
+namespace Nova.Common.Primitives
 {
-    public class Line
+    public class PrimitiveRectangle
     {
         private readonly GraphicsDevice _device;
         private readonly Color _color;
 
         private Texture2D _texture;
 
-        public Line(GraphicsDevice device, Color color)
+        public PrimitiveRectangle(GraphicsDevice device, Color color)
         {
             _device = device;
             _color = color;
@@ -29,13 +29,9 @@ namespace Nova.Primitives
             _texture.SetData(new Color[] { Color.White });
         }
 
-        public void Draw(SpriteBatch spriteBatch, Vector2 from, Vector2 to, float scale = 1f)
+        public void Draw(SpriteBatch spriteBatch, Vector2 position, int width, int height)
         {
-            spriteBatch.Draw(_texture, from, null, _color,
-                (float)Math.Atan2(to.Y - from.Y, to.X - from.X),
-                new Vector2(0f, (float)_texture.Height / 2),
-                new Vector2(Vector2.Distance(from, to), scale),
-                SpriteEffects.None, 0f);
+            spriteBatch.Draw(_texture, new Microsoft.Xna.Framework.Rectangle((int)position.X, (int)position.Y, width, height), _color);
         }
     }
 }

@@ -24,8 +24,7 @@ namespace Nova.Content.Pipeline.AnimatedSpriteSheet
             spriteSheet.TimeBetweenSprites = input.ReadInt64();
             spriteSheet.Repeat = input.ReadBoolean();
             spriteSheet.ReverseAtEnd = input.ReadBoolean();
-
-            var dataLength = input.ReadInt64();
+            
             var spriteCount = input.ReadUInt16();
 
             for (int i = 0; i < spriteCount; i++)
@@ -40,13 +39,13 @@ namespace Nova.Content.Pipeline.AnimatedSpriteSheet
                 sprite.X = input.ReadUInt16();
                 sprite.Y = input.ReadUInt16();
 
-                spriteSheet.Sprites.Add(sprite);
+                spriteSheet.Sprites[sprite.Name] = sprite;
             }
 
             spriteSheet.Texture = input.ContentManager.Load<Texture2D>(spriteSheet.AssetName);
 
             foreach (var sprite in spriteSheet.Sprites)
-                sprite.Texture = spriteSheet.Texture;
+                sprite.Value.Texture = spriteSheet.Texture;
 
             return spriteSheet;
         }

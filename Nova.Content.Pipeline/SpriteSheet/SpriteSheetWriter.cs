@@ -25,8 +25,9 @@ namespace Nova.Content.Pipeline.SpriteSheet
 
             ushort count = 0;
 
-            foreach (var sprite in obj.Sprites)
+            foreach (var spriteEntry in obj.Sprites)
             {
+                var sprite = spriteEntry.Value;
                 output.Write((ushort)count);
                 output.Write(sprite.Name);
                 output.Write((ushort)sprite.Width);
