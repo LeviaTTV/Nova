@@ -26,8 +26,6 @@ namespace Nova.Environment.Foliage
             rect = new Rectangle(0, 0, (int)width, (int)height);
             radius2 = radius * radius;
             cellSize = (float)(radius / Math.Sqrt(2));
-            /*grid = new Vector2[Mathf.CeilToInt(width / cellSize),
-                               Mathf.CeilToInt(height / cellSize)];*/
 
             grid = new Vector2[(int) Math.Ceiling(width / cellSize), (int)Math.Ceiling(height / cellSize)];
 

@@ -2,10 +2,8 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Nova.Common.Sprite;
 using Nova.Environment;
 using Penumbra;
-using Vector2 = Microsoft.Xna.Framework.Vector2;
 
 namespace Nova
 {
@@ -16,9 +14,7 @@ namespace Nova
 
         private Map _map;
         private MapRenderer _mapRenderer;
-
         private Camera2D _camera2D;
-
         private PenumbraComponent _penumbra;
 
         public NovaGame()
@@ -58,11 +54,7 @@ namespace Nova
 
             _mapRenderer = new MapRenderer(GraphicsDevice, _map, _camera2D);
             _mapRenderer.LoadContent(Content);
-
-            _ds = Content.Load<SpriteSheet>("treesTest");
         }
-
-        private SpriteSheet _ds;
 
         protected override void Update(GameTime gameTime)
         {
@@ -85,10 +77,8 @@ namespace Nova
 
             _spriteBatch.Begin(sortMode: SpriteSortMode.Deferred, samplerState: SamplerState.PointClamp, transformMatrix: _camera2D.Transform);
             _mapRenderer.Draw(_spriteBatch);
-            _ds["Tree1"].Draw(_spriteBatch, Vector2.One);
             _spriteBatch.End();
-
-
+            
             _penumbra.Draw(gameTime);
         }
     }

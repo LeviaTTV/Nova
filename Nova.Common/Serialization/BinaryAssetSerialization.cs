@@ -37,7 +37,7 @@ namespace Nova.Common.Sprite
             return _detectedSerializers[assetType].Serialize(obj, stream) + 5;
         }
 
-        public object Deserialize(GraphicsDevice device, Stream stream)
+        public object Deserialize(GraphicsDevice device, Stream stream, string fileName)
         {
             byte[] buf = new byte[4];
             stream.Read(buf, 0, 4);
@@ -45,10 +45,10 @@ namespace Nova.Common.Sprite
             var assetType = (AssetType)stream.ReadByte();
 
             var deserializer = _detectedSerializers[assetType];
-            return deserializer.Deserialize(device, stream);
+            return deserializer.Deserialize(device, stream, fileName);
         }
 
-        public T Deserialize<T>(GraphicsDevice device, Stream stream)
+        public T Deserialize<T>(GraphicsDevice device, Stream stream, string fileName)
         {
             byte[] buf = new byte[4];
             stream.Read(buf, 0, 4);
@@ -56,7 +56,7 @@ namespace Nova.Common.Sprite
             var assetType = (AssetType)stream.ReadByte();
 
             var deserializer = _detectedSerializers[assetType];
-            var obj = deserializer.Deserialize(device, stream);
+            var obj = deserializer.Deserialize(device, stream, fileName);
 
             return (T) obj;
         }

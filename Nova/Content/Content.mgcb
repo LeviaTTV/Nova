@@ -15,6 +15,40 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin Environment/Trees/TreesBrown.nvs
+/importer:SpriteSheetImporter
+/processor:SpriteSheetProcessor
+/build:Environment/Trees/TreesBrown.nvs
+
+#begin Environment/Trees/TreesBrownTexture.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Environment/Trees/TreesBrownTexture.png
+
+#begin Environment/Trees/TreesGreen.nvs
+/importer:SpriteSheetImporter
+/processor:SpriteSheetProcessor
+/build:Environment/Trees/TreesGreen.nvs
+
+#begin Environment/Trees/TreesGreenTexture.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Environment/Trees/TreesGreenTexture.png
+
 #begin Fonts/Arial8.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor

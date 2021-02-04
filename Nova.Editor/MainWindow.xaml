@@ -78,6 +78,7 @@
                     <StackPanel Orientation="Horizontal">
                         <Button Content="Load from image" Name="LoadFromImageButton" Command="{Binding LoadFromImageCommand}"/>
                         <Button Content="Load from asset" Name="LoadFromAsset" Command="{Binding LoadFromAssetCommand}"/>
+                        <Button Content="Import Sprite dimensions" Margin="10,0,0,0" Name="ImportSpriteDimensionsFromAsset" Command="{Binding LoadDimensionsFromAssetCommand}"/>
 
                         <Button Content="Save" Margin="10,0,0,0" Command="{Binding SaveCommand}"/>
                     </StackPanel>

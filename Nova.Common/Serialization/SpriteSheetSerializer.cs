@@ -23,7 +23,7 @@ namespace Nova.Common.Sprite
             
 
             offset += stream.WriteStringWithLength(obj.Name);
-            offset += stream.WriteStringWithLength(obj.Name); // Texture asset name
+            offset += stream.WriteStringWithLength(obj.Name + "Texture"); // Texture asset name
             offset += stream.WriteUInt16((ushort)obj.Sprites.Count);
 
             ushort count = 0;
@@ -42,13 +42,13 @@ namespace Nova.Common.Sprite
             return offset;
         }
 
-        public object Deserialize(GraphicsDevice device, Stream stream)
+        public object Deserialize(GraphicsDevice device, Stream stream, string fileName)
         {
             var spriteSheet = new SpriteSheet();
 
             var version = stream.ReadByte();
             spriteSheet.Name = stream.ReadStringWithLength();
-            var dataLength = stream.ReadInt64();
+            spriteSheet.AssetName = stream.ReadStringWithLength();
             ushort frameCount = stream.ReadUInt16();
 
             for (int i = 0; i < frameCount; i++)
@@ -66,18 +66,13 @@ namespace Nova.Common.Sprite
                 spriteSheet.Sprites[sprite.Name] = sprite;
             }
 
-            byte[] textureData = new byte[dataLength];
-            stream.Read(textureData, 0, (int)dataLength);
-
-            var memoryStream = new MemoryStream(textureData);
-            memoryStream.Position = 0;
-
-            spriteSheet.Texture = Texture2D.FromStream(device, memoryStream);
+            using (var fs = new FileStream(Path.Combine(Path.GetDirectoryName(fileName), spriteSheet.AssetName + ".png"), FileMode.Open))
+            {
+                spriteSheet.Texture = Texture2D.FromStream(device, fs);
+            }
 
             foreach (var sprite in spriteSheet.Sprites)
                 sprite.Value.Texture = spriteSheet.Texture;
-
-            memoryStream.Dispose();
 
             return spriteSheet;
         }

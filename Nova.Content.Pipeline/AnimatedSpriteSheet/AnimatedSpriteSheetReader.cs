@@ -42,7 +42,13 @@ namespace Nova.Content.Pipeline.AnimatedSpriteSheet
                 spriteSheet.Sprites[sprite.Name] = sprite;
             }
 
-            spriteSheet.Texture = input.ContentManager.Load<Texture2D>(spriteSheet.AssetName);
+
+
+            var path = "";
+            if (input.AssetName.IndexOf('/') != 0)
+                path = input.AssetName.Substring(0, input.AssetName.LastIndexOf('/') + 1);
+
+            spriteSheet.Texture = input.ContentManager.Load<Texture2D>(path + spriteSheet.AssetName);
 
             foreach (var sprite in spriteSheet.Sprites)
                 sprite.Value.Texture = spriteSheet.Texture;

@@ -40,6 +40,8 @@ namespace Editor
         private int _timeBetweenSprites = 83;
         private int _animationStartDelay = 0;
 
+        private string _openFromImageFileName;
+
         private int _activeTab = 0;
 
         public Visibility SpritePanelVisibility => _drawable is Sprite ? Visibility.Visible : Visibility.Hidden;
@@ -138,20 +140,48 @@ namespace Editor
         public ICommand GridDimensionEnterPressedCommand { get; set; }
         public ICommand SaveCommand { get; set; }
         public ICommand GenerateNoiseCommand { get; set; }
+        public ICommand LoadDimensionsFromAssetCommand { get; set; }
 
         private PrimitiveLine _line;
         public object _lock = new object();
 
         public MainWindowViewModel()
         {
-            LoadFromImageCommand = new RelayCommand<object>((obj) => LoadFromImage());
+            LoadFromImageCommand = new RelayCommand<object>(LoadFromImage);
             LoadFromAssetCommand = new RelayCommand<object>(LoadFromAsset);
+            LoadDimensionsFromAssetCommand = new RelayCommand<object>(LoadDimensionsFromAsset);
             MouseWheelCommand = new RelayCommand<MouseWheelEventArgs>(MouseWheelEvent);
             GridDimensionEnterPressedCommand = new RelayCommand<string>(SetSpriteCount);
             TreatRowAsNewSheetCommand = new RelayCommand<bool>(TreatRowsAsNewSheet);
             SpriteSelectedCommand = new RelayCommand<object>(SpriteSelected);
             SaveCommand = new RelayCommand<object>(Save);
             GenerateNoiseCommand = new RelayCommand<object>(GenerateNoise);
+        }
+
+        private void LoadDimensionsFromAsset(object obj)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            if (!openFileDialog.ShowDialog().GetValueOrDefault())
+                return;
+            
+            var asset = openFileDialog.FileName;
+
+            var assetSerialization = new BinaryAssetSerialization();
+
+            using (var fs = File.OpenRead(asset))
+            {
+                var assetObject = assetSerialization.Deserialize(GraphicsDevice, fs, asset);
+                
+                if (_drawable is SpriteSheet sheet && assetObject is SpriteSheet assetSheet)
+                {
+                    sheet.Sprites.Clear();
+
+                    foreach (var key in assetSheet.Sprites)
+                    {
+                        sheet.Sprites[key.Key] = key.Value;
+                    }
+                }
+            }
         }
 
         private void SpriteSelected(object obj)
@@ -173,14 +203,14 @@ namespace Editor
             if (!openFileDialog.ShowDialog().GetValueOrDefault())
                 return;
 
+            _openFromImageFileName = null;
             var asset = openFileDialog.FileName;
 
             var assetSerialization = new BinaryAssetSerialization();
-            //var assetSerialization = new JsonAssetSerialization(Path.GetDirectoryName(asset));
 
             using (var fs = File.OpenRead(asset))
             {
-                var assetObject = assetSerialization.Deserialize(GraphicsDevice, File.OpenRead(asset));
+                var assetObject = assetSerialization.Deserialize(GraphicsDevice, fs, asset);
 
 
                 if (assetObject is AnimatedSpriteSheet animatedSheet)
@@ -248,12 +278,14 @@ namespace Editor
 
                     if (item is Sprite)
                         item = _treeItems.FirstOrDefault().SpriteSheet;
-
-                    //var assetSerialization = new JsonAssetSerialization(Path.GetDirectoryName(fileName));
+                    
                     var assetSerialization = new BinaryAssetSerialization();
 
                     lock (_lock)
                         assetSerialization.Serialize(item, fs);
+
+                    if (_openFromImageFileName != null)
+                        File.Copy(_openFromImageFileName, Path.Combine(Path.GetDirectoryName(fileName), Path.GetFileNameWithoutExtension(_openFromImageFileName) + "Texture" + Path.GetExtension(_openFromImageFileName)));
                 }
             }
         }
@@ -416,16 +448,16 @@ namespace Editor
             _spriteBatch.End();
         }
 
-        private void LoadFromImage()
+        private void LoadFromImage(object obj)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             if (!openFileDialog.ShowDialog().GetValueOrDefault())
                 return;
+            
+            _openFromImageFileName = openFileDialog.FileName;
+            _texture = Texture2D.FromStream(GraphicsDevice, File.OpenRead(_openFromImageFileName));
 
-            var image = openFileDialog.FileName;
-            _texture = Texture2D.FromStream(GraphicsDevice, File.OpenRead(image));
-
-            Name = Path.GetFileNameWithoutExtension(image);
+            Name = Path.GetFileNameWithoutExtension(_openFromImageFileName);
 
             SpriteSheetChanged();
         }

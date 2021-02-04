@@ -21,7 +21,7 @@ namespace Nova.Common.Sprite
             ++offset;
 
             offset += stream.WriteStringWithLength(obj.Name);
-            offset += stream.WriteStringWithLength(obj.Name); // Texture name
+            offset += stream.WriteStringWithLength(obj.Name + "Texture"); // Texture name
             offset += stream.WriteInt64(obj.StartDelay);
             offset += stream.WriteInt64(obj.TimeBetweenSprites);
             offset += stream.WriteBool(obj.Repeat);
@@ -45,19 +45,19 @@ namespace Nova.Common.Sprite
             return offset;
         }
 
-        public object Deserialize(GraphicsDevice device, Stream stream)
+        public object Deserialize(GraphicsDevice device, Stream stream, string fileName)
         {
             var spriteSheet = new AnimatedSpriteSheet();
 
             var version = stream.ReadByte();
             spriteSheet.Name = stream.ReadStringWithLength();
+            spriteSheet.AssetName = stream.ReadStringWithLength();
 
             spriteSheet.StartDelay = stream.ReadInt64();
             spriteSheet.TimeBetweenSprites = stream.ReadInt64();
             spriteSheet.Repeat = stream.ReadBool();
             spriteSheet.ReverseAtEnd = stream.ReadBool();
-
-            var dataLength = stream.ReadInt64();
+            
             ushort frameCount = stream.ReadUInt16();
 
             for (int i = 0; i < frameCount; i++)
@@ -74,21 +74,15 @@ namespace Nova.Common.Sprite
 
                 spriteSheet.Sprites[sprite.Name] = sprite;
             }
-
-
-
-            byte[] textureData = new byte[dataLength];
-            stream.Read(textureData, 0, (int)dataLength);
-
-            var memoryStream = new MemoryStream(textureData);
-            memoryStream.Position = 0;
-
-            spriteSheet.Texture = Texture2D.FromStream(device, memoryStream);
-
+            
+            using (var fs = new FileStream(Path.Combine(Path.GetDirectoryName(fileName), spriteSheet.AssetName + ".png"), FileMode.Open))
+            {
+                spriteSheet.Texture = Texture2D.FromStream(device, fs);
+            }
+            
             foreach (var sprite in spriteSheet.Sprites)
                 sprite.Value.Texture = spriteSheet.Texture;
-
-            memoryStream.Dispose();
+            
 
             return spriteSheet;
         }
