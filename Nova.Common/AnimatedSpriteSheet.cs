@@ -15,20 +15,15 @@ namespace Nova.Common.Sprite
         public long TimeBetweenSprites { get; set; } = 83;
         public bool Repeat { get; set; } = true;
         public bool ReverseAtEnd { get; set; }
-
-        [JsonIgnore]
+        
         public int CurrentIndex { get; private set; } = 0;
-
-        [JsonIgnore]
+        
         public int SpriteCount => Sprites.Count;
-
-        [JsonIgnore]
+        
         public bool HasEnded { get; private set; }
-
-        [JsonIgnore]
+        
         private bool _running = false;
-
-        [JsonIgnore]
+        
         private double _accumulator;
 
         private List<Sprite> _sprites;
@@ -54,6 +49,12 @@ namespace Nova.Common.Sprite
         {
             _running = true;
             _sprites = Sprites.Values.ToList();
+        }
+
+        public void Reset()
+        {
+            CurrentIndex = 0;
+            _accumulator = 0;
         }
 
         public void Update(GameTime gameTime)
@@ -88,18 +89,18 @@ namespace Nova.Common.Sprite
             }
         }
 
-        public override void Draw(SpriteBatch spriteBatch, Vector2 position, float rotation = default(float))
+        public override void Draw(SpriteBatch spriteBatch, Vector2 position, float rotation = default(float), Vector2 origin = default(Vector2), SpriteEffects spriteEffects = SpriteEffects.None, float layerDepth = 0f)
         {
             if (HasEnded)
                 return;
-
+            
             _running = true;
 
             if (_sprites == null || !_sprites.Any())
                 return;
 
             var sprite = _sprites[CurrentIndex];
-            sprite.Draw(spriteBatch, position);
+            sprite.Draw(spriteBatch, position, rotation, origin, spriteEffects, layerDepth);
         }
     }
 }

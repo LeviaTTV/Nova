@@ -34,7 +34,7 @@ namespace Editor
             if (_isDragging)
             {
                 var relativePosition = e.GetPosition(MonoGameContentControl);
-                if (!Keyboard.IsKeyDown(Key.LeftCtrl))
+                if (!Keyboard.IsKeyDown(Key.LeftCtrl) && !Keyboard.IsKeyDown(Key.LeftShift))
                 {
                     if (_previousPosition != default(Point))
                     {
@@ -59,7 +59,7 @@ namespace Editor
             _isDragging = true;
             _previousPosition = e.GetPosition(MonoGameContentControl);
 
-            if (Keyboard.IsKeyDown(Key.LeftCtrl))
+            if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.LeftShift))
             {
                 _startPosition = _previousPosition;
             }
@@ -74,6 +74,12 @@ namespace Editor
                 _endPosition = e.GetPosition(MonoGameContentControl);
 
                 ((MainWindowViewModel)this.DataContext).Select(_startPosition.X, _startPosition.Y, _endPosition.X, _endPosition.Y);
+            }
+            else if (Keyboard.IsKeyDown(Key.LeftShift))
+            {
+                _endPosition = e.GetPosition(MonoGameContentControl);
+
+                ((MainWindowViewModel)this.DataContext).Select(_startPosition.X, _startPosition.Y, _endPosition.X, _endPosition.Y, true);
             }
         }
 

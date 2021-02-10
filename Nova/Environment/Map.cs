@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Nova.Objects;
+using Microsoft.Xna.Framework;
 
 namespace Nova.Environment
 {
@@ -13,7 +13,7 @@ namespace Nova.Environment
         public int TileHeight { get; set; }
 
         public Dictionary<TileCoordinate, Tile> Tiles { get; set; }
-        public List<GameObject> GameObjects { get; set; }
+        public Vector2 StartPosition { get; set; }
     }
 
     public struct TileCoordinate

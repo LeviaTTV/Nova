@@ -7,9 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nova.Editor", "Nova.Editor\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nova.Common", "Nova.Common\Nova.Common.csproj", "{B549DF17-C0C1-4360-A1DE-D495D06C8DD0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nova", "Nova\Nova.csproj", "{1B37D94A-763C-43FF-AF8E-BB18A59F70E9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nova", "Nova\Nova.csproj", "{1B37D94A-763C-43FF-AF8E-BB18A59F70E9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nova.Content.Pipeline", "Nova.Content.Pipeline\Nova.Content.Pipeline.csproj", "{9121E5DA-6505-432A-9313-2B70A167B7E2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nova.Content.Pipeline", "Nova.Content.Pipeline\Nova.Content.Pipeline.csproj", "{9121E5DA-6505-432A-9313-2B70A167B7E2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nova.EdgeDetection", "Nova.EdgeDetection\Nova.EdgeDetection.csproj", "{29F06672-E8FD-4E84-8D6B-7C0AB3A7BAFC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{9121E5DA-6505-432A-9313-2B70A167B7E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9121E5DA-6505-432A-9313-2B70A167B7E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9121E5DA-6505-432A-9313-2B70A167B7E2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{29F06672-E8FD-4E84-8D6B-7C0AB3A7BAFC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{29F06672-E8FD-4E84-8D6B-7C0AB3A7BAFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{29F06672-E8FD-4E84-8D6B-7C0AB3A7BAFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{29F06672-E8FD-4E84-8D6B-7C0AB3A7BAFC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

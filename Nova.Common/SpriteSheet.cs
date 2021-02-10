@@ -24,7 +24,7 @@ namespace Nova.Common.Sprite
 
         public string AssetName { get; set; }
 
-        public virtual void Draw(SpriteBatch spriteBatch, Vector2 position, float rotation = default(float))
+        public virtual void Draw(SpriteBatch spriteBatch, Vector2 position, float rotation = default(float), Vector2 origin = default(Vector2), SpriteEffects spriteEffects = SpriteEffects.None, float layerDepth = 0f)
         {
             spriteBatch.Draw(Texture, position, Color.White);
         }
@@ -38,6 +38,11 @@ namespace Nova.Common.Sprite
             spriteObj.SourceRectangle = sourceRectangle;
 
             return spriteObj;
+        }
+
+        public IEnumerable<Sprite> GetSprites(int startInclusive, int count)
+        {
+            return Sprites.Values.ToList().GetRange(startInclusive, count);
         }
     }
 }

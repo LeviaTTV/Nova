@@ -43,7 +43,7 @@ namespace Nova
         private void UpdateMatrix()
         {
             Transform = Matrix.CreateTranslation(new Vector3(-Position.X, -Position.Y, 0)) *
-                    Matrix.CreateScale(Zoom) *
+                    Matrix.CreateScale(Zoom, Zoom, 1) *
                     Matrix.CreateTranslation(new Vector3(Bounds.Width * 0.5f, Bounds.Height * 0.5f, 0));
             UpdateVisibleArea();
         }
@@ -61,9 +61,9 @@ namespace Nova
             {
                 Zoom = .15f;
             }
-            if (Zoom > 3f)
+            if (Zoom > 2f)
             {
-                Zoom = 3f;
+                Zoom = 2f;
             }
         }
 

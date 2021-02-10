@@ -5,7 +5,8 @@
             "UpperLimit": 0.25,
             "TileType": "Water",
             "Sheet": "Environment/Terrain/BaseWater",
-            "Sprite": "471"
+            "Sprite": "471",
+            "Traversable": false
         },
         {
             "LowerLimit": 0.25,

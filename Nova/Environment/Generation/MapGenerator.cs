@@ -9,11 +9,14 @@ using Nova.Common.Noise;
 using Nova.Common.Sprite;
 using Nova.Environment.Foliage;
 using Nova.Objects;
+using Nova.Objects.Environment;
+using Nova.Services;
 
 namespace Nova.Environment
 {
     public class MapGenerator
     {
+        private readonly GameServiceContainer _services;
         private readonly GraphicsDevice _device;
         private readonly int _seed;
         private readonly ContentManager _contentManager;
@@ -24,14 +27,16 @@ namespace Nova.Environment
         private readonly List<TileTransitionMask> _tileTransitionMasks = new();
         private readonly List<SpriteTransition> _spriteTransitions = new();
         private FoliageMappings _foliageMappings;
+        
+        private readonly GameObjectManager _gameObjectManager;
 
-        private readonly List<FoliageGameObject> _gameObjects = new List<FoliageGameObject>();
-
-        public MapGenerator(GraphicsDevice device, int seed, ContentManager contentManager)
+        public MapGenerator(GameServiceContainer services, GraphicsDevice device, int seed, ContentManager contentManager)
         {
+            _services = services;
             _device = device;
             _seed = seed;
             _contentManager = contentManager;
+            _gameObjectManager = services.GetService<GameObjectManager>();
         }
 
         public Map Generate(int width, int height)
@@ -61,8 +66,41 @@ namespace Nova.Environment
 
             FoliagePass(map);
 
-            map.GameObjects = _gameObjects.OrderBy(x => x.Tile.Y).Cast<GameObject>().ToList();
+            _gameObjectManager.SortFoliageGameObjectsByYCoordinate();
+            
+            SpawnLocationPass(map);
+
             return map;
+        }
+
+        private void SpawnLocationPass(Map map)
+        {
+            var poissonDiscSampler = new PoissonDiscSampler(map.Width * 0.7f, map.Height * 0.7f, 8);
+
+            var startOffset = 1.2f;
+            foreach (var sample in poissonDiscSampler.Samples())
+            {
+                var tile = map.Tiles[new TileCoordinate((int) (sample.X * startOffset), (int) (sample.Y * startOffset))];
+                if (tile.TileType == TileType.Grass || tile.TileType == TileType.LightGrass)
+                {
+                    map.StartPosition = new Vector2(tile.X * 32, tile.Y * 32);
+                    break;
+                }
+            }
+
+
+            var campFire = new CampFire(_services);
+            campFire.LoadContent(_contentManager);
+            var tent = new Tent(_services);
+            tent.LoadContent(_contentManager);
+
+
+            tent.Position = map.StartPosition + new Vector2(-32f, -32f - tent.Height);
+            campFire.Position = tent.Position + new Vector2(16f, tent.Height + 8f);
+
+            _gameObjectManager.AddGameObject(campFire);
+            _gameObjectManager.AddGameObject(tent);
+
         }
 
         private void FoliagePass(Map map)
@@ -157,11 +195,11 @@ namespace Nova.Environment
 
             var gameObject = (FoliageGameObject)Activator.CreateInstance(Type.GetType(mapping.Type), new object[]
             {
-                _device,
+                _services,
                 tile
             });
 
-            _gameObjects.Add(gameObject);
+            _gameObjectManager.AddFoliageGameObject(gameObject);
         }
 
         private void PreloadSpriteSheets()
@@ -274,7 +312,8 @@ namespace Nova.Environment
                     {
                         TileType = type,
                         X = x,
-                        Y = y
+                        Y = y,
+                        Traversable = mapping?.Traversable ?? true
                     };
                 }
             }

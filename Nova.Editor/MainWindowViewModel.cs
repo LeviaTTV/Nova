@@ -14,8 +14,8 @@ using Nova.Common.Noise;
 using Nova.Common.Primitives;
 using Nova.Common.Sprite;
 using Color = Microsoft.Xna.Framework.Color;
-using IDrawable = Nova.Common.Sprite.IDrawable;
-using IUpdateable = Nova.Common.Sprite.IUpdateable;
+using IDrawable = Nova.Common.IDrawable;
+using IUpdateable = Nova.Common.IUpdateable;
 using Rectangle = Microsoft.Xna.Framework.Rectangle;
 
 namespace Editor
@@ -56,9 +56,90 @@ namespace Editor
                 if (sprite == null)
                     return;
 
+                var oldName = sprite.Name;
                 sprite.Name = value;
 
+
+                var sheet = _treeItems.FirstOrDefault().SpriteSheet;
+                if (sheet != null && sheet is SpriteSheet spriteSheet)
+                {
+                    spriteSheet.Sprites.Remove(oldName);
+                    spriteSheet.Sprites[value] = sprite;
+                }
+
                 UpdateSpriteCollection();
+            }
+        }
+
+        public int SpriteX
+        {
+            get
+            {
+                return _drawable is Sprite ? ((Sprite)_drawable).X : 0;
+            }
+            set
+            {
+                var sprite = _drawable as Sprite;
+
+                if (sprite == null)
+                    return;
+
+                sprite.X = value;
+
+                UpdateSpriteCollection();
+            }
+        }
+
+        public int SpriteY
+        {
+            get
+            {
+                return _drawable is Sprite ? ((Sprite)_drawable).Y : 0;
+            }
+            set
+            {
+                var sprite = _drawable as Sprite;
+
+                if (sprite == null)
+                    return;
+
+                sprite.Y = value;
+
+                UpdateSpriteCollection();
+            }
+        }
+
+        public int SpriteWidth
+        {
+            get
+            {
+                return _drawable is Sprite ? ((Sprite)_drawable).Width : 0;
+            }
+            set
+            {
+                var sprite = _drawable as Sprite;
+
+                if (sprite == null)
+                    return;
+
+                sprite.Width = value;
+            }
+        }
+
+        public int SpriteHeight
+        {
+            get
+            {
+                return _drawable is Sprite ? ((Sprite)_drawable).Height : 0;
+            }
+            set
+            {
+                var sprite = _drawable as Sprite;
+
+                if (sprite == null)
+                    return;
+
+                sprite.Height = value;
             }
         }
 
@@ -130,6 +211,17 @@ namespace Editor
             }
         }
 
+        private bool _drawNames;
+        public bool DrawNames
+        {
+            get => _drawNames;
+            set
+            {
+                _drawNames = value;
+                OnPropertyChanged(nameof(DrawNames));
+            }
+        }
+
         private bool _treatRowsAsNewSheet;
 
         public ICommand LoadFromImageCommand { get; set; }
@@ -141,6 +233,7 @@ namespace Editor
         public ICommand SaveCommand { get; set; }
         public ICommand GenerateNoiseCommand { get; set; }
         public ICommand LoadDimensionsFromAssetCommand { get; set; }
+        public ICommand ClearSpritesCommand { get; set; }
 
         private PrimitiveLine _line;
         public object _lock = new object();
@@ -156,6 +249,16 @@ namespace Editor
             SpriteSelectedCommand = new RelayCommand<object>(SpriteSelected);
             SaveCommand = new RelayCommand<object>(Save);
             GenerateNoiseCommand = new RelayCommand<object>(GenerateNoise);
+            ClearSpritesCommand = new RelayCommand<object>(ClearSprites);
+        }
+
+        private void ClearSprites(object obj)
+        {
+            if (_drawable is SpriteSheet sheet)
+            {
+                sheet.Sprites.Clear();
+                UpdateSpriteCollection();
+            }
         }
 
         private void LoadDimensionsFromAsset(object obj)
@@ -180,6 +283,8 @@ namespace Editor
                     {
                         sheet.Sprites[key.Key] = key.Value;
                     }
+
+                    UpdateSpriteCollection();
                 }
             }
         }
@@ -190,6 +295,10 @@ namespace Editor
             {
                 _drawable = drawable;
                 OnPropertyChanged("SpritePanelName");
+                OnPropertyChanged("SpriteX");
+                OnPropertyChanged("SpriteY");
+                OnPropertyChanged("SpriteWidth");
+                OnPropertyChanged("SpriteHeight");
             }
             else if (obj is SpriteSheetViewModel vm)
                 _drawable = vm.SpriteSheet;
@@ -290,7 +399,7 @@ namespace Editor
                         name = sheet.Name;
 
                     if (_openFromImageFileName != null)
-                        File.Copy(_openFromImageFileName, Path.Combine(Path.GetDirectoryName(fileName), name + "Texture" + Path.GetExtension(_openFromImageFileName)));
+                        File.Copy(_openFromImageFileName, Path.Combine(Path.GetDirectoryName(fileName), name + "Texture" + Path.GetExtension(_openFromImageFileName)), true);
                 }
             }
         }
@@ -401,52 +510,22 @@ namespace Editor
                             _line.Draw(_spriteBatch, new Vector2(_position.X + sprite.X + sprite.Width, _position.Y + sprite.Y), new Vector2(_position.X + sprite.X + sprite.Width, _position.Y + sprite.Y + sprite.Height));
                             _line.Draw(_spriteBatch, new Vector2(_position.X + sprite.X, _position.Y + sprite.Y + sprite.Height), new Vector2(_position.X + sprite.X + sprite.Width, _position.Y + sprite.Y + sprite.Height));
 
-                            _spriteBatch.DrawString(_font, sprite.Name, new Vector2(_position.X + sprite.X + 2, _position.Y + sprite.Y + 2), Color.Blue);
+                            if (_drawNames)
+                                _spriteBatch.DrawString(_font, sprite.Name, new Vector2(_position.X + sprite.X + 2, _position.Y + sprite.Y + 2), Color.Blue);
                         }
                     }
                 }
             }
-
-            /*if (!(_drawable is AnimatedSpriteSheet) && !(_drawable is Sprite))
-            {
-                int texWidth = _texture.Width;
-                int texHeight = _texture.Height;
-
-                int rows = texHeight / _gridHeight;
-                int columns = texWidth / _gridWidth;
-
-                for (int i = 0; i != rows + 1; ++i)
-                    _spriteBatch.Draw(_gridLineTexture2D, new Rectangle(x, y + i * _gridHeight, texWidth, 1), Color.Red);
-
-                for (int i = 0; i != columns + 1; ++i)
-                    _spriteBatch.Draw(_gridLineTexture2D, new Rectangle(x + i * _gridWidth, y, 1, texHeight), Color.Red);
-
-                int count = 0;
-                for (int zy = 0; zy != rows; ++zy)
-                {
-                    if (_treatRowsAsNewSheet)
-                        count = 0;
-                    for (int zx = 0; zx != columns; ++zx)
-                    {
-                        ++count;
-                        int startX = x + zx * _gridWidth;
-                        int startY = y + zy * _gridHeight;
-
-                        _spriteBatch.DrawString(_font, count.ToString(), new Vector2(startX + 2, startY + 2), Color.Black);
-                    }
-                }
-            }*/
-
-
+            
             //
             if (_selectionRectangle != default(Rectangle))
             {
                 var line = new PrimitiveLine(GraphicsDevice, Color.Green);
 
-                line.Draw(_spriteBatch, new Vector2(_selectionRectangle.X, _selectionRectangle.Y), new Vector2(_selectionRectangle.X + _selectionRectangle.Width, _selectionRectangle.Y));
-                line.Draw(_spriteBatch, new Vector2(_selectionRectangle.X + _selectionRectangle.Width, _selectionRectangle.Y), new Vector2(_selectionRectangle.X + _selectionRectangle.Width, _selectionRectangle.Y + _selectionRectangle.Height));
-                line.Draw(_spriteBatch, new Vector2(_selectionRectangle.X, _selectionRectangle.Y + _selectionRectangle.Height), new Vector2(_selectionRectangle.X + _selectionRectangle.Width, _selectionRectangle.Y + _selectionRectangle.Height));
-                line.Draw(_spriteBatch, new Vector2(_selectionRectangle.X, _selectionRectangle.Y), new Vector2(_selectionRectangle.X, _selectionRectangle.Y +_selectionRectangle.Height));
+                line.Draw(_spriteBatch, new Vector2(_selectionRectangle.X, _selectionRectangle.Y), new Vector2(_selectionRectangle.X + _selectionRectangle.Width, _selectionRectangle.Y), 0.5f);
+                line.Draw(_spriteBatch, new Vector2(_selectionRectangle.X + _selectionRectangle.Width, _selectionRectangle.Y), new Vector2(_selectionRectangle.X + _selectionRectangle.Width, _selectionRectangle.Y + _selectionRectangle.Height), 0.5f);
+                line.Draw(_spriteBatch, new Vector2(_selectionRectangle.X, _selectionRectangle.Y + _selectionRectangle.Height), new Vector2(_selectionRectangle.X + _selectionRectangle.Width, _selectionRectangle.Y + _selectionRectangle.Height), 0.5f);
+                line.Draw(_spriteBatch, new Vector2(_selectionRectangle.X, _selectionRectangle.Y), new Vector2(_selectionRectangle.X, _selectionRectangle.Y +_selectionRectangle.Height), 0.5f);
 
             }
             
@@ -813,7 +892,7 @@ namespace Editor
                 _noiseTexture = texture;
         }
 
-        public void Select(double startPositionX, double startPositionY, double endPositionX, double endPositionY)
+        public void Select(double startPositionX, double startPositionY, double endPositionX, double endPositionY, bool addMode = false)
         {
             var transform = Matrix.Invert(Matrix.CreateScale(_scale.X));
 
@@ -824,26 +903,53 @@ namespace Editor
 
             if (_drawable is SpriteSheet sheet)
             {
-                var sprites = sheet.Sprites.Values.Where(x => _position.X + x.X + x.Width > start.X && _position.X + x.X <= end.X &&
-                                                               _position.Y + x.Y + x.Height > start.Y && _position.Y + x.Y <= end.Y).ToList();
-
-                if (sprites.Count() > 1)
+                if (!addMode)
                 {
-                    var first = sprites.FirstOrDefault();
-                    
-                    // New rect
-                    first.Width = sprites.Max(x => x.X) + first.Width - first.X;
-                    first.Height = sprites.Max(x => x.Y) + first.Height - first.Y;
+                    var sprites = sheet.Sprites.Values.Where(x => _position.X + x.X + x.Width > start.X && _position.X + x.X <= end.X &&
+                                                                  _position.Y + x.Y + x.Height > start.Y && _position.Y + x.Y <= end.Y).ToList();
 
-                    // Remove others
-                    foreach (var key in sprites)
+                    if (sprites.Count() > 1)
                     {
-                        if (key == first)
-                            continue;
+                        var first = sprites.FirstOrDefault();
 
-                        sheet.Sprites.Remove(key.Name);
+                        // New rect
+                        first.Width = sprites.Max(x => x.X) + first.Width - first.X;
+                        first.Height = sprites.Max(x => x.Y) + first.Height - first.Y;
+
+                        // Remove others
+                        foreach (var key in sprites)
+                        {
+                            if (key == first)
+                                continue;
+
+                            sheet.Sprites.Remove(key.Name);
+                        }
+
+                        UpdateSpriteCollection();
+                    }
+                }
+                else
+                {
+                    var spriteName = "Sprite";
+
+                    int count = 1;
+                    while (sheet.Sprites.ContainsKey(spriteName))
+                    {
+                        spriteName += count;
+                        ++count;
                     }
 
+                    var sprite = new Sprite()
+                    {
+                        Height = (int)(end.Y - start.Y), 
+                        Width = (int)(end.X - start.X),
+                        X = (int)(start.X - _position.X),
+                        Y = (int)(start.Y - _position.Y),
+                        Name = spriteName,
+                        Texture = sheet.Texture
+                    };
+
+                    sheet.Sprites[sprite.Name] = sprite;
                     UpdateSpriteCollection();
                 }
 

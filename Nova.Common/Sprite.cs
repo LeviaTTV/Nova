@@ -21,16 +21,9 @@ namespace Nova.Common.Sprite
         public int X { get; set; }
         public int Y { get; set; }
 
-        public virtual void Draw(SpriteBatch spriteBatch, Vector2 position, float rotation = default(float))
+        public virtual void Draw(SpriteBatch spriteBatch, Vector2 position, float rotation = default(float), Vector2 origin = default(Vector2), SpriteEffects spriteEffects = SpriteEffects.None, float layerDepth = 0f)
         {
-            if (rotation > default(float))
-            {
-                spriteBatch.Draw(Texture, new Rectangle((int)position.X, (int)position.Y, Width, Height), SourceRectangle, Color.White, rotation, Vector2.Zero, SpriteEffects.None, 0f);
-            }
-            else
-            {
-                spriteBatch.Draw(Texture, position, SourceRectangle, Color.White);
-            }
+            spriteBatch.Draw(Texture, new Rectangle((int)position.X, (int)position.Y, Width, Height), SourceRectangle, Color.White, rotation, origin, spriteEffects, layerDepth);
         }
 
         public object Clone()

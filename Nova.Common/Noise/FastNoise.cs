@@ -74,8 +74,6 @@ namespace Nova.Common.Noise
             // Gather noise data
             float[,] noiseData = new float[width, height];
             
-            int index = 0;
-
             float min = -1f;
             float max = 1f;
             for (int y = 0; y < height; y++)

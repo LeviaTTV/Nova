@@ -6,7 +6,6 @@ using Microsoft.Xna.Framework.Graphics;
 using Nova.Common.Extensions;
 using Nova.Common.Primitives;
 using Nova.Common.Sprite;
-using Nova.Objects;
 
 namespace Nova.Environment
 {
@@ -17,23 +16,18 @@ namespace Nova.Environment
         private readonly Camera2D _camera2D;
         private PrimitiveRectangle _positionRectangle;
         private PrimitiveLine _line;
-        private SpriteFont _font;
-
-        public bool DebugMode { get; set; }
-        public bool DoNotRenderTransitions { get; set; }
 
         private Dictionary<TileType, Sprite> _tileMappings = new();
 
-        public MapRenderer(GraphicsDevice device, Map map,Camera2D camera2D)
+        public MapRenderer(GameServiceContainer services, Map map)
         {
-            _device = device;
             _map = map;
-            _camera2D = camera2D;
+            _device = services.GetService<GraphicsDevice>();
+            _camera2D = services.GetService<Camera2D>();
         }
 
         public void LoadContent(ContentManager content)
         {
-            _font = content.Load<SpriteFont>("Fonts/Arial8");
             _positionRectangle = new PrimitiveRectangle(_device, Color.Red);
 
             var dict = new Dictionary<string, SpriteSheet>();
@@ -63,16 +57,22 @@ namespace Nova.Environment
             rectBounds.Y -= 32;
             rectBounds.Width += 32;
             rectBounds.Height += 32;
+            
+            int endY = rectBounds.Y + rectBounds.Height;
+            int endX = rectBounds.X + rectBounds.Width;
 
-            var tilesToRender = _map.Tiles.Where(tile => tile.Value.InBounds(_map, rectBounds)).ToList();
+            
+            foreach (var tile in _map.Tiles)
+            {
+                if (tile.Key.X * 32 >= rectBounds.X && tile.Key.Y * 32 >= rectBounds.Y && tile.Key.X * 32 <= endX && tile.Key.Y * 32 <= endY)
+                {
+                    DrawTile(spriteBatch, _camera2D.Position, tile.Value);
 
-            foreach (var tile in tilesToRender)
-                DrawTile(spriteBatch, _camera2D.Position, tile.Value);
-
-            foreach (var gameObject in _map.GameObjects)
-                DrawGameObject(spriteBatch, gameObject);
-
-            _positionRectangle.Draw(spriteBatch, _camera2D.Position, 5, 5);
+                    // Bail out because we know the next tiles are definitely going to be out of bounds
+                    if (tile.Key.Y * 32 + 32 >= endY && tile.Key.X * 32 + 32 >= endX)
+                        break;
+                }
+            }
         }
         
         private void DrawTile(SpriteBatch spriteBatch, Vector2 cameraPos, Tile tile)
@@ -81,17 +81,17 @@ namespace Nova.Environment
             var position = new Vector2(tile.X * _map.TileWidth, tile.Y * _map.TileHeight);
 
             
-            sprite.Draw(spriteBatch, position);
+            sprite.Draw(spriteBatch, position, layerDepth: 0.99f);
 
             if (tile.TileBlending != 0)
             {
-                if (!DoNotRenderTransitions && tile.BlendTextureList.Any())
+                if (!DebugTools.DoNotRenderTileTransitions && tile.BlendTextureList.Any())
                 {
                     foreach (var blendTexture in tile.BlendTextureList)
-                        spriteBatch.Draw(blendTexture, position, Color.White);
+                        spriteBatch.Draw(blendTexture, position, null, Color.White, 0f, Vector2.Zero, Vector2.One, SpriteEffects.None, 0.95f);
                 }
 
-                if (DebugMode)
+                if (DebugTools.GenericDebugEnabled)
                 {
                     if (tile.TileBlending.HasFlag(TileBlending.North))
                     {
@@ -139,11 +139,6 @@ namespace Nova.Environment
                     _line.Draw(spriteBatch, position + new Vector2(32, 0), position + new Vector2(32, 32), 1f, Color.Red);
                 }
             }
-        }
-        
-        private void DrawGameObject(SpriteBatch spriteBatch, GameObject gameObject)
-        {
-            gameObject.Draw(spriteBatch);
         }
     }
 }

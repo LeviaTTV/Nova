@@ -15,6 +15,142 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin Character/Feet/FemaleBrownLongboots.nvs
+/importer:SpriteSheetImporter
+/processor:SpriteSheetProcessor
+/build:Character/Feet/FemaleBrownLongboots.nvs
+
+#begin Character/Feet/FemaleBrownLongbootsTexture.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Character/Feet/FemaleBrownLongbootsTexture.png
+
+#begin Character/Female/BodyFemaleLight.nvs
+/importer:SpriteSheetImporter
+/processor:SpriteSheetProcessor
+/build:Character/Female/BodyFemaleLight.nvs
+
+#begin Character/Female/BodyFemaleLightTexture.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Character/Female/BodyFemaleLightTexture.png
+
+#begin Character/Hair/HairLongPink.nvs
+/importer:SpriteSheetImporter
+/processor:SpriteSheetProcessor
+/build:Character/Hair/HairLongPink.nvs
+
+#begin Character/Hair/HairLongPinkTexture.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Character/Hair/HairLongPinkTexture.png
+
+#begin Character/Legs/FemaleRedPants.nvs
+/importer:SpriteSheetImporter
+/processor:SpriteSheetProcessor
+/build:Character/Legs/FemaleRedPants.nvs
+
+#begin Character/Legs/FemaleRedPantsTexture.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Character/Legs/FemaleRedPantsTexture.png
+
+#begin Character/Torso/FemaleBlackCorset.nvs
+/importer:SpriteSheetImporter
+/processor:SpriteSheetProcessor
+/build:Character/Torso/FemaleBlackCorset.nvs
+
+#begin Character/Torso/FemaleBlackCorsetTexture.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Character/Torso/FemaleBlackCorsetTexture.png
+
+#begin Character/Torso/FemaleBrownTunic.nvs
+/importer:SpriteSheetImporter
+/processor:SpriteSheetProcessor
+/build:Character/Torso/FemaleBrownTunic.nvs
+
+#begin Character/Torso/FemaleBrownTunicTexture.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Character/Torso/FemaleBrownTunicTexture.png
+
+#begin Environment/CampFire.nvas
+/importer:AnimatedSpriteSheetImporter
+/processor:AnimatedSpriteSheetProcessor
+/build:Environment/CampFire.nvas
+
+#begin Environment/CampFireTexture.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Environment/CampFireTexture.png
+
+#begin Environment/GreenTent.nvs
+/importer:SpriteSheetImporter
+/processor:SpriteSheetProcessor
+/build:Environment/GreenTent.nvs
+
+#begin Environment/GreenTentTexture.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Environment/GreenTentTexture.png
+
 #begin Environment/Plants/FoliagePlants.nvs
 /importer:SpriteSheetImporter
 /processor:SpriteSheetProcessor
@@ -100,6 +236,23 @@
 /processorParam:TextureFormat=Color
 /build:Environment/Trees/TreesDeadTexture.png
 
+#begin Environment/Trees/TreesDepthTest.nvs
+/importer:SpriteSheetImporter
+/processor:SpriteSheetProcessor
+/build:Environment/Trees/TreesDepthTest.nvs
+
+#begin Environment/Trees/TreesDepthTestTexture.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Environment/Trees/TreesDepthTestTexture.png
+
 #begin Environment/Trees/TreesGreen.nvs
 /importer:SpriteSheetImporter
 /processor:SpriteSheetProcessor
@@ -151,12 +304,43 @@
 /processorParam:TextureFormat=Color
 /build:Environment/Trees/TreesPaleTexture.png
 
+#begin Fonts/Arial16.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Fonts/Arial16.spritefont
+
 #begin Fonts/Arial8.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
 /processorParam:PremultiplyAlpha=True
 /processorParam:TextureFormat=Compressed
 /build:Fonts/Arial8.spritefont
+
+#begin Fonts/TitleFontVariant1.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Fonts/TitleFontVariant1.png
+
+#begin Fonts/TitleFontVariant2.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Fonts/TitleFontVariant2.png
 
 #begin Settings/FoliageMappings.json
 /importer:JsonImporter
@@ -503,4 +687,21 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:TileTransitionMasks/W-4.png
+
+#begin UI/Packed.nvs
+/importer:SpriteSheetImporter
+/processor:SpriteSheetProcessor
+/build:UI/Packed.nvs
+
+#begin UI/PackedTexture.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:UI/PackedTexture.png
 

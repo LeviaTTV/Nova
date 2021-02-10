@@ -4,7 +4,6 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Nova.Common.Sprite;
 using Nova.Environment;
-using Nova.Environment.Foliage;
 
 namespace Nova.Objects.Environment
 {
@@ -12,8 +11,8 @@ namespace Nova.Objects.Environment
     {
         private Sprite _sprite;
 
-        public Grass(GraphicsDevice graphicsDevice, Tile tile)
-            : base(graphicsDevice, tile)
+        public Grass(GameServiceContainer services, Tile tile)
+            : base(services, tile)
         {
         }
 
@@ -40,7 +39,7 @@ namespace Nova.Objects.Environment
         {
             var position = new Vector2(Tile.X * 32, Tile.Y * 32);
 
-            _sprite.Draw(spriteBatch, position);
+            _sprite.Draw(spriteBatch, position, layerDepth: 0.9f);
         }
     }
 }

@@ -14,6 +14,8 @@ namespace Nova.Environment
 
         public List<Texture2D> BlendTextureList { get; set; } = new List<Texture2D>();
 
+        public  bool Traversable { get; set; }
+
         public bool InBounds(Map map, Rectangle bounds)
         {
             int x = X * map.TileWidth;
