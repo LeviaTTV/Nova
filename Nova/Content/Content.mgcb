@@ -15,6 +15,45 @@
 
 #---------------------------------- Content ---------------------------------#
 
+#begin AI/ChickenBehavior.json
+/importer:JsonImporter
+/processor:PassThroughProcessor
+/build:AI/ChickenBehavior.json
+
+#begin Animals/AnimalChickenEat.nvs
+/importer:SpriteSheetImporter
+/processor:SpriteSheetProcessor
+/build:Animals/AnimalChickenEat.nvs
+
+#begin Animals/AnimalChickenEatTexture.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Animals/AnimalChickenEatTexture.png
+
+#begin Animals/AnimalChickenWalk.nvs
+/importer:SpriteSheetImporter
+/processor:SpriteSheetProcessor
+/build:Animals/AnimalChickenWalk.nvs
+
+#begin Animals/AnimalChickenWalkTexture.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Animals/AnimalChickenWalkTexture.png
+
 #begin Character/Feet/FemaleBrownLongboots.nvs
 /importer:SpriteSheetImporter
 /processor:SpriteSheetProcessor

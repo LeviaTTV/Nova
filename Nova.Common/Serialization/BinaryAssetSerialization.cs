@@ -10,7 +10,7 @@ namespace Nova.Common.Sprite
 {
     public class BinaryAssetSerialization
     {
-        private Dictionary<AssetType, IBinaryAssetSerializer> _detectedSerializers = new Dictionary<AssetType, IBinaryAssetSerializer>();
+        private readonly Dictionary<AssetType, IBinaryAssetSerializer> _detectedSerializers = new Dictionary<AssetType, IBinaryAssetSerializer>();
         
         public BinaryAssetSerialization()
         {

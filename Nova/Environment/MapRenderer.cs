@@ -17,7 +17,7 @@ namespace Nova.Environment
         private PrimitiveRectangle _positionRectangle;
         private PrimitiveLine _line;
 
-        private Dictionary<TileType, Sprite> _tileMappings = new();
+        private readonly Dictionary<TileType, Sprite> _tileMappings = new();
 
         public MapRenderer(GameServiceContainer services, Map map)
         {

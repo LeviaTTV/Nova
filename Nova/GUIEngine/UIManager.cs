@@ -51,9 +51,9 @@ namespace Nova.GUIEngine
         private SpriteBatch _uiSpriteBatch;
         private float _scale;
 
-        private List<Visual> _visuals = new List<Visual>();
+        private readonly List<Visual> _visuals = new List<Visual>();
 
-        private List<Visual> _receivingLeftMouseDownEvent = new List<Visual>();
+        private readonly List<Visual> _receivingLeftMouseDownEvent = new List<Visual>();
         private List<(Visual, Keys)> _receivingKeyDownEvent = new List<(Visual, Keys)>();
 
         private GraphicsDevice _graphicsDevice;

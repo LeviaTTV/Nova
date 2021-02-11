@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Nova.Environment
+namespace Nova.Environment.Generation
 {
     public class TileTransitionVariation
     {

@@ -1,0 +1,24 @@
+﻿{
+    "Name": "ChickenBehavior",
+    "Type": "Selector",
+    "AppliesTo": "Chicken",
+    "Children": [
+        {
+            "Type": "Sequence",
+            "Children": [
+                {
+                    "Type": "DetectLureBehavior"
+                },
+                {
+                    "Type": "MoveToLureBehavior"
+                },
+                {
+                    "Type": "EatLureBehavior"
+                }
+            ]
+        },
+        {
+            "Type": "WanderBehavior"
+        }
+    ]
+}

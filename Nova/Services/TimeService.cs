@@ -7,7 +7,7 @@ namespace Nova.Services
     public class TimeService : Nova.Common.IUpdateable
     {
         private readonly GameServiceContainer _services;
-        private PenumbraComponent _penumbra;
+        private readonly PenumbraComponent _penumbra;
 
         public DateTime CurrentTime { get; private set; }
 

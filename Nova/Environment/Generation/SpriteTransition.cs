@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Nova.Common.Sprite;
 
-namespace Nova.Environment
+namespace Nova.Environment.Generation
 {
     public class SpriteTransition
     {

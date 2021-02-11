@@ -12,7 +12,7 @@ using Nova.Objects;
 using Nova.Objects.Environment;
 using Nova.Services;
 
-namespace Nova.Environment
+namespace Nova.Environment.Generation
 {
     public class MapGenerator
     {
@@ -46,7 +46,8 @@ namespace Nova.Environment
                 Width = width,
                 Height = height,
                 TileWidth = 32,
-                TileHeight = 32
+                TileHeight = 32,
+                Seed = _seed
             };
 
             _tileMappings = _contentManager.LoadObject<TileMappings>("Settings/TileMappings");
@@ -100,7 +101,6 @@ namespace Nova.Environment
 
             _gameObjectManager.AddGameObject(campFire);
             _gameObjectManager.AddGameObject(tent);
-
         }
 
         private void FoliagePass(Map map)

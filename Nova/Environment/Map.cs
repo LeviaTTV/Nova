@@ -14,6 +14,7 @@ namespace Nova.Environment
 
         public Dictionary<TileCoordinate, Tile> Tiles { get; set; }
         public Vector2 StartPosition { get; set; }
+        public int Seed { get; set; }
     }
 
     public struct TileCoordinate
@@ -26,5 +27,7 @@ namespace Nova.Environment
             X = x;
             Y = y;
         }
+
+        public Vector2 ToActualVector2() => new Vector2(X * 32, Y * 32);
     }
 }

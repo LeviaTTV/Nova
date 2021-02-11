@@ -13,34 +13,32 @@ using Penumbra;
 
 namespace Nova.Objects.Character
 {
-    public class PlayerCharacter : CharacterGameObject
+    public class PlayerCharacter : LivingGameObject
     {
-        private List<DirectionCharacterParts> _characterParts = new List<DirectionCharacterParts>();
-
-        private Orientation _facingOrientation = Orientation.Bottom;
-
+        private readonly List<DirectionCharacterParts> _characterParts = new List<DirectionCharacterParts>();
+        
         private DirectionCharacterParts _characterPartsDrawable;
-        private MapService _mapService;
+        private readonly MapService _mapService;
 
         private Tile _collisionCheckTile;
         private PrimitiveRectangle _rectangle;
         private PrimitiveRectangle _rectangle2;
 
         private Vector2 _origin;
-        private GameObjectManager _gameObjectManager;
-        private PenumbraComponent _penumbra;
-
-        private Hull _hull;
+        private readonly GameObjectManager _gameObjectManager;
+        private Camera2D _camera;
 
         public PlayerCharacter(GameServiceContainer services) : base(services)
         {
             _mapService = services.GetService<MapService>();
             _gameObjectManager = services.GetService<GameObjectManager>();
-            _penumbra = services.GetService<PenumbraComponent>();
+            _camera = services.GetService<Camera2D>();
         }
 
         public override void LoadContent(ContentManager contentManager)
         {
+            base.LoadContent(contentManager);
+
             var parts = new[] {
                 contentManager.Load<SpriteSheet>("Character/Female/BodyFemaleLight"),
                 contentManager.Load<SpriteSheet>("Character/Hair/HairLongPink"),
@@ -81,11 +79,6 @@ namespace Nova.Objects.Character
 
             Width = 32;
             Height = 64;
-
-            _hull = new Hull(new Vector2(0, 0) - _origin, new Vector2(Width, 0) - _origin, new Vector2(Width, Height) - _origin, new Vector2(0, Height) - _origin);
-            _hull.Position = Position;
-            _hull.Enabled = false;
-            _penumbra.Hulls.Add(_hull);
         }
 
         private AnimatedSpriteSheet GenerateAnimatedSpriteSheet(IEnumerable<Sprite> sprites)
@@ -93,15 +86,15 @@ namespace Nova.Objects.Character
             var sheet = new AnimatedSpriteSheet();
             sheet.TimeBetweenSprites = 83;
             foreach (var sprite in sprites)
-            {
                 sheet.Sprites[sprite.Name] = sprite;
-            }
 
             return sheet;
         }
 
         public override void Update(GameTime gameTime)
         {
+            base.Update(gameTime);
+
             float moveSpeed = 250f * ((float)gameTime.ElapsedGameTime.TotalMilliseconds / 1000f);
 
             var state = Keyboard.GetState();
@@ -113,25 +106,25 @@ namespace Nova.Objects.Character
             if (state.IsKeyDown(Keys.W))
             {
                 newPosition.Y += -moveSpeed;
-                _facingOrientation = Orientation.Top;
+                Orientation = Orientation.Top;
             }
 
             if (state.IsKeyDown(Keys.A))
             {
                 newPosition.X += -moveSpeed;
-                _facingOrientation = Orientation.Left;
+                Orientation = Orientation.Left;
             }
 
             if (state.IsKeyDown(Keys.D))
             {
                 newPosition.X += moveSpeed;
-                _facingOrientation = Orientation.Right;
+                Orientation = Orientation.Right;
             }
 
             if (state.IsKeyDown(Keys.S))
             {
                 newPosition.Y += moveSpeed;
-                _facingOrientation = Orientation.Bottom;
+                Orientation = Orientation.Bottom;
             }
 
 
@@ -143,14 +136,14 @@ namespace Nova.Objects.Character
 
                 CollisionBounds = new Rectangle((int)(newPosition.X - _origin.X / 2) + 4, (int)(newPosition.Y - _origin.Y) + 32 + 8, 32 - 8, 24);
 
-                var gameObjects = _gameObjectManager.GetCollidingFoliageGameObjects(CollisionBounds);
+                var gameObjects = _gameObjectManager.GetCollidingFoliageGameObjects(this, CollisionBounds);
 
                 if (tile != null && tile.Traversable && !gameObjects.Any())
                     Position = newPosition;
             }
 
 
-            _characterPartsDrawable = _characterParts.FirstOrDefault(x => x.Orientation == _facingOrientation);
+            _characterPartsDrawable = _characterParts.FirstOrDefault(x => x.Orientation == Orientation);
             foreach (var sheets in _characterPartsDrawable.SpriteSheets)
             {
                 sheets.Update(gameTime);
@@ -161,11 +154,13 @@ namespace Nova.Objects.Character
                     sheets.Update(gameTime);
             }
 
-            _hull.Position = Position;
+            _camera.Position = new Vector2((int)Position.X, (int)Position.Y);
         }
         
         public override void Draw(SpriteBatch spriteBatch)
         {
+            base.Draw(spriteBatch);
+
             int count = 0;
             
             foreach (var sheets in _characterPartsDrawable.SpriteSheets)

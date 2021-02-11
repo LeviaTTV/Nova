@@ -16,7 +16,7 @@ namespace Nova.Objects.Environment
 
         private Rectangle _destinationRectangle;
         private Vector2 _origin;
-        private PlayerCharacter _playerCharacter;
+        private readonly PlayerCharacter _playerCharacter;
         private PrimitiveRectangle _rectangle;
         private PrimitiveRectangle _rectangle2;
         private PrimitiveRectangle _rectangle3;

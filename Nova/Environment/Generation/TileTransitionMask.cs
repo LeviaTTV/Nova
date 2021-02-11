@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Nova.Environment
+namespace Nova.Environment.Generation
 {
     public class TileTransitionMask
     {

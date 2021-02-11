@@ -12,7 +12,7 @@ namespace Nova.Objects.Environment
     public class Shrub : FoliageGameObject
     {
         private Sprite _sprite;
-        private PlayerCharacter _playerCharacter;
+        private readonly PlayerCharacter _playerCharacter;
 
         private PrimitiveRectangle _rectangle;
 

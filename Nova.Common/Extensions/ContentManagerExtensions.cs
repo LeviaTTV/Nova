@@ -7,6 +7,8 @@ using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Nova.Common.AI.BT.Base;
+using Nova.Common.AI.BT.Models;
 
 namespace Nova.Common.Extensions
 {

@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nova.Content.Pipeline", "No
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nova.EdgeDetection", "Nova.EdgeDetection\Nova.EdgeDetection.csproj", "{29F06672-E8FD-4E84-8D6B-7C0AB3A7BAFC}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EpPathFinding", "EpPathFinding\EpPathFinding.csproj", "{22D24176-71A4-4684-8BEF-AE2C649411C9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{29F06672-E8FD-4E84-8D6B-7C0AB3A7BAFC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{29F06672-E8FD-4E84-8D6B-7C0AB3A7BAFC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{29F06672-E8FD-4E84-8D6B-7C0AB3A7BAFC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{22D24176-71A4-4684-8BEF-AE2C649411C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22D24176-71A4-4684-8BEF-AE2C649411C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22D24176-71A4-4684-8BEF-AE2C649411C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{22D24176-71A4-4684-8BEF-AE2C649411C9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

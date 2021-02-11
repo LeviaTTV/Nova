@@ -11,10 +11,10 @@ namespace Nova.Environment.Foliage
         private readonly Rectangle rect;
         private readonly float radius2;  // radius squared
         private readonly float cellSize;
-        private Vector2[,] grid;
-        private List<Vector2> activeSamples = new List<Vector2>();
+        private readonly Vector2[,] grid;
+        private readonly List<Vector2> activeSamples = new List<Vector2>();
 
-        private Random _random;
+        private readonly Random _random;
 
         /// Create a sampler with the following parameters:
         ///
@@ -114,8 +114,8 @@ namespace Nova.Environment.Foliage
         /// Helper struct to calculate the x and y indices of a sample in the grid
         private struct GridPos
         {
-            public int x;
-            public int y;
+            public readonly int x;
+            public readonly int y;
 
             public GridPos(Vector2 sample, float cellSize)
             {

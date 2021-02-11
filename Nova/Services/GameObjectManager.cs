@@ -37,11 +37,11 @@ namespace Nova.Services
                 obj.LoadContent(content);
         }
 
-        public IEnumerable<GameObject> GetCollidingFoliageGameObjects(Rectangle rect)
+        public IEnumerable<GameObject> GetCollidingFoliageGameObjects(GameObject self, Rectangle rect)
         {
             var foliageList = FoliageGameObjects.Where(z => z.Value.CollisionEnabled && z.Value.CollisionBounds.Intersects(rect)).Select(z => z.Value);
 
-            var gameObjectList = GameObjects.Where(z => z.CollisionEnabled && z.CollisionBounds.Intersects(rect));
+            var gameObjectList = GameObjects.Where(z => z.CollisionEnabled && z.CollisionBounds.Intersects(rect) && z != self);
 
             return foliageList.Concat(gameObjectList);
         }

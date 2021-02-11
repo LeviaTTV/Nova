@@ -11,8 +11,8 @@ namespace Nova.Objects.Environment
     public class Tent : GameObject
     {
         private Sprite _sprite;
-        private PenumbraComponent _penumbra;
-        private PlayerCharacter _playerCharacter;
+        private readonly PenumbraComponent _penumbra;
+        private readonly PlayerCharacter _playerCharacter;
         private Hull _hull;
 
         private PrimitiveRectangle _rectangle1;

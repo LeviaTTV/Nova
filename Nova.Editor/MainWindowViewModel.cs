@@ -143,7 +143,7 @@ namespace Editor
             }
         }
 
-        private ObservableCollection<SpriteSheetViewModel> _treeItems = new ObservableCollection<SpriteSheetViewModel>();
+        private readonly ObservableCollection<SpriteSheetViewModel> _treeItems = new ObservableCollection<SpriteSheetViewModel>();
         public ObservableCollection<SpriteSheetViewModel> TreeItems => _treeItems;
 
         public bool IsAnimation

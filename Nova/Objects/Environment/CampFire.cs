@@ -11,13 +11,13 @@ namespace Nova.Objects.Environment
     public class CampFire : GameObject
     {
         private AnimatedSpriteSheet _sheet;
-        private PenumbraComponent _penumbra;
+        private readonly PenumbraComponent _penumbra;
         private PointLight _light;
 
 
         private bool _expand;
         private double _accumulator;
-        private PlayerCharacter _playerCharacter;
+        private readonly PlayerCharacter _playerCharacter;
 
         public override bool CollisionEnabled => false;
 
