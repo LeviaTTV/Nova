@@ -35,11 +35,11 @@ THE SOFTWARE.
 An Interface for the BaseGrid Class.
 
 */
+
 using System;
 using System.Collections.Generic;
-using System.Collections;
 
-namespace EpPathFinding.cs
+namespace EpPathFinding.Grid
 {
     public class Node : IComparable<Node>
     {

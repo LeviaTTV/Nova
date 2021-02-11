@@ -35,12 +35,10 @@ THE SOFTWARE.
 An Interface for the DynamicGrid Class.
 
 */
-using System;
+
 using System.Collections.Generic;
-using System.Collections;
 
-
-namespace EpPathFinding.cs
+namespace EpPathFinding.Grid
 {
     public class DynamicGrid : BaseGrid
     {
@@ -54,7 +52,7 @@ namespace EpPathFinding.cs
             {
                 if (m_notSet)
                     setBoundingBox();
-                return m_gridRect.maxX - m_gridRect.minX + 1;
+                return m_gridRect.MaxX - m_gridRect.MinX + 1;
             }
             protected set
             {
@@ -68,7 +66,7 @@ namespace EpPathFinding.cs
             {
                 if (m_notSet)
                     setBoundingBox();
-                return m_gridRect.maxY - m_gridRect.minY + 1;
+                return m_gridRect.MaxY - m_gridRect.MinY + 1;
             }
             protected set
             {
@@ -80,10 +78,10 @@ namespace EpPathFinding.cs
             : base()
         {
             m_gridRect = new GridRect();
-            m_gridRect.minX = 0;
-            m_gridRect.minY = 0;
-            m_gridRect.maxX = 0;
-            m_gridRect.maxY = 0;
+            m_gridRect.MinX = 0;
+            m_gridRect.MinY = 0;
+            m_gridRect.MaxX = 0;
+            m_gridRect.MaxY = 0;
             m_notSet = true;
             buildNodes(iWalkableGridList);
         }
@@ -125,14 +123,14 @@ namespace EpPathFinding.cs
             m_notSet = true;
             foreach (KeyValuePair<GridPos, Node> pair in m_nodes)
             {
-                if (pair.Key.x < m_gridRect.minX || m_notSet)
-                    m_gridRect.minX = pair.Key.x;
-                if (pair.Key.x > m_gridRect.maxX || m_notSet)
-                    m_gridRect.maxX = pair.Key.x;
-                if (pair.Key.y < m_gridRect.minY || m_notSet)
-                    m_gridRect.minY = pair.Key.y;
-                if (pair.Key.y > m_gridRect.maxY || m_notSet)
-                    m_gridRect.maxY = pair.Key.y;
+                if (pair.Key.x < m_gridRect.MinX || m_notSet)
+                    m_gridRect.MinX = pair.Key.x;
+                if (pair.Key.x > m_gridRect.MaxX || m_notSet)
+                    m_gridRect.MaxX = pair.Key.x;
+                if (pair.Key.y < m_gridRect.MinY || m_notSet)
+                    m_gridRect.MinY = pair.Key.y;
+                if (pair.Key.y > m_gridRect.MaxY || m_notSet)
+                    m_gridRect.MaxY = pair.Key.y;
                 m_notSet = false;
             }
             m_notSet = false;
@@ -151,14 +149,14 @@ namespace EpPathFinding.cs
                 }
                 else
                 {
-                    if (iX < m_gridRect.minX || m_notSet)
-                        m_gridRect.minX = iX;
-                    if (iX > m_gridRect.maxX || m_notSet)
-                        m_gridRect.maxX = iX;
-                    if (iY < m_gridRect.minY || m_notSet)
-                        m_gridRect.minY = iY;
-                    if (iY > m_gridRect.maxY || m_notSet)
-                        m_gridRect.maxY = iY;
+                    if (iX < m_gridRect.MinX || m_notSet)
+                        m_gridRect.MinX = iX;
+                    if (iX > m_gridRect.MaxX || m_notSet)
+                        m_gridRect.MaxX = iX;
+                    if (iY < m_gridRect.MinY || m_notSet)
+                        m_gridRect.MinY = iY;
+                    if (iY > m_gridRect.MaxY || m_notSet)
+                        m_gridRect.MaxY = iY;
                     m_nodes.Add(new GridPos(pos.x, pos.y), new Node(pos.x, pos.y, iWalkable));
                     //m_notSet = false;
                 }
@@ -168,7 +166,7 @@ namespace EpPathFinding.cs
                 if (m_nodes.ContainsKey(pos))
                 {
                     m_nodes.Remove(pos);
-                    if (iX == m_gridRect.minX || iX == m_gridRect.maxX || iY == m_gridRect.minY || iY == m_gridRect.maxY)
+                    if (iX == m_gridRect.MinX || iX == m_gridRect.MaxX || iY == m_gridRect.MinY || iY == m_gridRect.MaxY)
                         m_notSet = true;
                 }
             }

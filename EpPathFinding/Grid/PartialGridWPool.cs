@@ -35,11 +35,10 @@ THE SOFTWARE.
 An Interface for the PartialGrid with Pool Class.
 
 */
-using System;
-using System.Collections.Generic;
-using System.Collections;
 
-namespace EpPathFinding.cs
+using System.Collections.Generic;
+
+namespace EpPathFinding.Grid
 {
     public class PartialGridWPool : BaseGrid
     {
@@ -49,7 +48,7 @@ namespace EpPathFinding.cs
         {
             get
             {
-                return m_gridRect.maxX - m_gridRect.minX + 1;
+                return m_gridRect.MaxX - m_gridRect.MinX + 1;
             }
             protected set
             {
@@ -61,7 +60,7 @@ namespace EpPathFinding.cs
         {
             get
             {
-                return m_gridRect.maxY - m_gridRect.minY + 1;
+                return m_gridRect.MaxY - m_gridRect.MinY + 1;
             }
             protected set
             {
@@ -94,7 +93,7 @@ namespace EpPathFinding.cs
 
         public bool IsInside(int iX, int iY)
         {
-            if (iX < m_gridRect.minX || iX > m_gridRect.maxX || iY < m_gridRect.minY || iY > m_gridRect.maxY)
+            if (iX < m_gridRect.MinX || iX > m_gridRect.MaxX || iY < m_gridRect.MinY || iY > m_gridRect.MaxY)
                 return false;
             return true;
         }
@@ -146,14 +145,14 @@ namespace EpPathFinding.cs
 
         public override void Reset()
         {
-            int rectCount=(m_gridRect.maxX-m_gridRect.minX) * (m_gridRect.maxY-m_gridRect.minY);
+            int rectCount=(m_gridRect.MaxX-m_gridRect.MinX) * (m_gridRect.MaxY-m_gridRect.MinY);
             if (m_nodePool.Nodes.Count > rectCount)
             {
                 GridPos travPos = new GridPos(0, 0);
-                for (int xTrav = m_gridRect.minX; xTrav <= m_gridRect.maxX; xTrav++)
+                for (int xTrav = m_gridRect.MinX; xTrav <= m_gridRect.MaxX; xTrav++)
                 {
                     travPos.x = xTrav;
-                    for (int yTrav = m_gridRect.minY; yTrav <= m_gridRect.maxY; yTrav++)
+                    for (int yTrav = m_gridRect.MinY; yTrav <= m_gridRect.MaxY; yTrav++)
                     {
                         travPos.y = yTrav;
                         Node curNode=m_nodePool.GetNode(travPos);

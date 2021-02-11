@@ -1,26 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace EpPathFinding.cs
+﻿namespace EpPathFinding
 {
     public class Util
     {
         public static DiagonalMovement GetDiagonalMovement(bool iCrossCorners, bool iCrossAdjacentPoint)
         {
-
-            if (iCrossCorners && iCrossAdjacentPoint)
+            switch (iCrossCorners)
             {
-                return DiagonalMovement.Always;
-            }
-            else if (iCrossCorners)
-            {
-                return DiagonalMovement.IfAtLeastOneWalkable;
-            }
-            else
-            {
-                return DiagonalMovement.OnlyWhenNoObstacles;
+                case true when iCrossAdjacentPoint:
+                    return DiagonalMovement.Always;
+                case true:
+                    return DiagonalMovement.IfAtLeastOneWalkable;
+                default:
+                    return DiagonalMovement.OnlyWhenNoObstacles;
             }
         }
     }

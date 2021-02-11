@@ -35,11 +35,8 @@ THE SOFTWARE.
 An Interface for the StaticGrid Class.
 
 */
-using System;
-using System.Collections.Generic;
-using System.Collections;
 
-namespace EpPathFinding.cs
+namespace EpPathFinding.Grid
 {
     public class StaticGrid : BaseGrid
     {
@@ -53,10 +50,10 @@ namespace EpPathFinding.cs
         {
             width = iWidth;
             height = iHeight;
-            m_gridRect.minX = 0;
-            m_gridRect.minY = 0;
-            m_gridRect.maxX = iWidth-1;
-            m_gridRect.maxY = iHeight - 1;
+            m_gridRect.MinX = 0;
+            m_gridRect.MinY = 0;
+            m_gridRect.MaxX = iWidth-1;
+            m_gridRect.MaxY = iHeight - 1;
             this.m_nodes = buildNodes(iWidth, iHeight, iMatrix);
         }
 

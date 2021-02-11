@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using EpPathFinding.cs;
+using EpPathFinding;
+using EpPathFinding.Grid;
 using Microsoft.Xna.Framework;
 using Nova.Common.Extensions;
 using Nova.Environment;
@@ -67,7 +68,7 @@ namespace Nova.Services
             var start = new GridPos(startPos.X, startPos.Y);
             var end = new GridPos(endPos.X, endPos.Y);
 
-            var param = new JumpPointParam(_staticGrid, start, end, EndNodeUnWalkableTreatment.ALLOW);
+            var param = new JumpPointParam(_staticGrid, start, end, EndNodeUnWalkableTreatment.Allow);
 
             var listPositions = JumpPointFinder.FindPath(param);
             

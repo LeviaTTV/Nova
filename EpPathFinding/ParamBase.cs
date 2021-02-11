@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using EpPathFinding.Grid;
 
-namespace EpPathFinding.cs
+namespace EpPathFinding
 {
     public delegate float HeuristicDelegate(int iDx, int iDy);
 
     public abstract class ParamBase
     {
-        public ParamBase(BaseGrid iGrid, GridPos iStartPos, GridPos iEndPos, DiagonalMovement iDiagonalMovement, HeuristicMode iMode) : this(iGrid, iDiagonalMovement, iMode)
+        protected ParamBase(BaseGrid iGrid, GridPos iStartPos, GridPos iEndPos, DiagonalMovement iDiagonalMovement, HeuristicMode iMode) : this(iGrid, iDiagonalMovement, iMode)
         {
             m_startNode = m_searchGrid.GetNodeAt(iStartPos.x, iStartPos.y);
             m_endNode = m_searchGrid.GetNodeAt(iEndPos.x, iEndPos.y);
@@ -19,7 +16,7 @@ namespace EpPathFinding.cs
                 m_endNode = new Node(iEndPos.x, iEndPos.y, true);
         }
 
-        public ParamBase(BaseGrid iGrid, DiagonalMovement iDiagonalMovement, HeuristicMode iMode)
+        protected ParamBase(BaseGrid iGrid, DiagonalMovement iDiagonalMovement, HeuristicMode iMode)
         {
             SetHeuristic(iMode);
 
@@ -29,7 +26,7 @@ namespace EpPathFinding.cs
             m_endNode = null;
         }
 
-        public ParamBase(ParamBase param)
+        protected ParamBase(ParamBase param)
         {
             m_searchGrid = param.m_searchGrid;
             DiagonalMovement = param.DiagonalMovement;
@@ -94,13 +91,13 @@ namespace EpPathFinding.cs
             m_heuristic = null;
             switch (iMode)
             {
-                case HeuristicMode.MANHATTAN:
+                case HeuristicMode.Manhattan:
                     m_heuristic = new HeuristicDelegate(Heuristic.Manhattan);
                     break;
-                case HeuristicMode.EUCLIDEAN:
+                case HeuristicMode.Euclidean:
                     m_heuristic = new HeuristicDelegate(Heuristic.Euclidean);
                     break;
-                case HeuristicMode.CHEBYSHEV:
+                case HeuristicMode.Chebyshev:
                     m_heuristic = new HeuristicDelegate(Heuristic.Chebyshev);
                     break;
                 default:

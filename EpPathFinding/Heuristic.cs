@@ -36,19 +36,9 @@ An Interface for the Heuristic Function Class.
 
 */
 using System;
-using System.Collections.Generic;
-using System.Collections;
 
-namespace EpPathFinding.cs
+namespace EpPathFinding
 {
-    public enum HeuristicMode
-    {
-        MANHATTAN,
-        EUCLIDEAN,
-        CHEBYSHEV,
-
-    };
-
     public class Heuristic
     {
         public static float Manhattan(int iDx, int iDy)

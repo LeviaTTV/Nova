@@ -35,11 +35,10 @@ THE SOFTWARE.
 An Interface for the NodePool Class.
 
 */
-using System;
 using System.Collections.Generic;
-using System.Collections;
+using EpPathFinding.Grid;
 
-namespace EpPathFinding.cs
+namespace EpPathFinding
 {
     public class NodePool
     {
@@ -50,10 +49,8 @@ namespace EpPathFinding.cs
             m_nodes = new Dictionary<GridPos, Node>();
         }
 
-        public Dictionary<GridPos, Node> Nodes
-        {
-            get { return m_nodes; }
-        }
+        public Dictionary<GridPos, Node> Nodes => m_nodes;
+
         public Node GetNode(int iX, int iY)
         {
             GridPos pos = new GridPos(iX, iY);
@@ -62,8 +59,7 @@ namespace EpPathFinding.cs
 
         public Node GetNode(GridPos iPos)
         {
-            Node retVal = null;
-            m_nodes.TryGetValue(iPos, out retVal);
+            m_nodes.TryGetValue(iPos, out var retVal);
             return retVal;
         }
 
@@ -90,7 +86,7 @@ namespace EpPathFinding.cs
                 }
                 else
                 {
-                    removeNode(iPos);
+                    RemoveNode(iPos);
                 }
 
             }
@@ -102,12 +98,12 @@ namespace EpPathFinding.cs
             }
             return null;
         }
-        protected void removeNode(int iX, int iY)
+        protected void RemoveNode(int iX, int iY)
         {
             GridPos pos = new GridPos(iX, iY);
-            removeNode(pos);
+            RemoveNode(pos);
         }
-        protected void removeNode(GridPos iPos)
+        protected void RemoveNode(GridPos iPos)
         {
             if (m_nodes.ContainsKey(iPos))
                 m_nodes.Remove(iPos);
