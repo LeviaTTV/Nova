@@ -4,9 +4,8 @@ using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Nova.Common.AI.BT;
-using Nova.Common.AI.BT.Base;
-using Nova.Common.Extensions;
+using Nova.AI.BT;
+using Nova.AI.BT.Base;
 using Nova.Common.Primitives;
 using Nova.Services;
 
@@ -25,6 +24,15 @@ namespace Nova.Objects.Character
         protected AIService AIService;
         protected Node BehaviorTree;
 
+        protected AIExecutionContext AIExecutionContext { get; set; }
+
+        public Dictionary<string, LivingAction> SupportedActions { get; protected set; } = new Dictionary<string, LivingAction>();
+        public List<LivingAction> ActiveActions { get; protected set; } = new List<LivingAction>();
+
+        public bool IsMoving { get; protected set; }
+
+        public float MoveSpeedModifier { get; set; } = 0.1f;
+
         protected LivingGameObject(GameServiceContainer services) : base(services)
         {
             AIService = Services.GetService<AIService>();
@@ -36,6 +44,11 @@ namespace Nova.Objects.Character
             
             var behaviorTreeService = Services.GetService<AIService>();
 
+            AIExecutionContext = new AIExecutionContext()
+            {
+                LivingGameObject = this,
+                Services = Services
+            };
             BehaviorTree = behaviorTreeService.GetBehaviorTreeThatAppliesTo(this.GetType().Name);
             behaviorTreeService.Register(this);
 
@@ -57,23 +70,39 @@ namespace Nova.Objects.Character
             if (BehaviorTree == null)
                 return;
 
-            LastAINodeStatus = BehaviorTree.Execute();
+            LastAINodeStatus = BehaviorTree.Execute(AIExecutionContext);
         }
 
-        public void MoveTo(Point point)
-        { 
-            var pathFindingService =  Services.GetService<PathFindingService>();
+        public void PerformAction(string name, bool force = false)
+        {
+            if (SupportedActions.TryGetValue(name, out var action))
+            {
+                ActiveActions.Add(action);
 
-            _walkingToList = pathFindingService.FindPath((Position / 32f).ToPoint(), point).Select(z => z.ToVector2() * 32f).ToList();
+                action.IsRunning = true;
+            }
+        }
 
-            if (_walkingToList.Any())
-                SuspendAI();
+        public void MoveTo(Vector2 point, bool usePathFinding = true)
+        {
+            if (usePathFinding)
+            {
+                var pathFindingService = Services.GetService<PathFindingService>();
 
-            _targetPoint = _walkingToList.FirstOrDefault();
+                _walkingToList = pathFindingService.FindPath((Position / 32f).ToPoint(), (point / 32f).ToPoint()).Select(z => z.ToVector2() * 32f).ToList();
+                _targetPoint = _walkingToList.FirstOrDefault();
+            }
+            else
+            {
+                _walkingToList = new List<Vector2>(1) { _targetPoint };
+                _targetPoint = point;
+            }
         }
         
         public override void Update(GameTime gameTime)
         {
+            ActiveActions.RemoveAll(z => !z.IsRunning);
+
             if (_walkingToList == null || !_walkingToList.Any())
                 return;
 
@@ -81,13 +110,19 @@ namespace Nova.Objects.Character
             {
                 _walkingToList.Remove(_targetPoint);
                 _targetPoint = _walkingToList.FirstOrDefault();
+                if (_targetPoint == default(Vector2))
+                {
+                    _walkingToList.Clear();
+                    IsMoving = false;
+                    return;
+                }
             }
             
             var currentTargetPoint = _targetPoint;
             var elapsed = (float)gameTime.ElapsedGameTime.TotalMilliseconds;
 
             var distance = Vector2.Distance(Position, currentTargetPoint);
-            var interpolatedVector = Vector2.Lerp(Position, currentTargetPoint, 0.1f / distance * elapsed);
+            var interpolatedVector = Vector2.Lerp(Position, currentTargetPoint, MoveSpeedModifier / distance * elapsed);
             
             float xDif = interpolatedVector.X - Position.X;
             float yDif = interpolatedVector.Y - Position.Y;
@@ -99,6 +134,8 @@ namespace Nova.Objects.Character
             {
                 Orientation = yDif < 0 ? Orientation.Top : Orientation.Bottom;
             }
+
+            IsMoving = true;
             
             Position = interpolatedVector;
         }

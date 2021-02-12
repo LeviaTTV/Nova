@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Newtonsoft.Json;
 
 namespace Nova.Common.Sprite
 {
@@ -23,6 +19,7 @@ namespace Nova.Common.Sprite
         public bool HasEnded { get; private set; }
         
         private bool _running = false;
+        public bool Running => _running;
         
         private double _accumulator;
 
@@ -48,12 +45,14 @@ namespace Nova.Common.Sprite
         public void Start()
         {
             _running = true;
+            HasEnded = false;
             _sprites = Sprites.Values.ToList();
         }
 
         public void Reset()
         {
             CurrentIndex = 0;
+            HasEnded = false;
             _accumulator = 0;
         }
 

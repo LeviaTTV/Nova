@@ -1,11 +1,6 @@
-﻿using System;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Nova.Common.AI.BT;
-using Nova.Common.AI.BT.Actions;
-using Nova.Common.AI.BT.Composite;
-using Nova.Common.AI.BT.Decorator;
 using Nova.Common.Primitives;
 using Nova.Environment;
 using Nova.Environment.Generation;
@@ -16,7 +11,6 @@ using Nova.Objects.Animals;
 using Nova.Objects.Character;
 using Nova.Services;
 using Penumbra;
-using Point = Microsoft.Xna.Framework.Point;
 
 namespace Nova
 {

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Nova.Common.Noise
+﻿namespace Nova.Common.Noise
 {
     public interface INoise
     {

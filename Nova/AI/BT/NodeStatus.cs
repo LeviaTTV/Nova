@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Nova.Common.AI.BT
+﻿namespace Nova.AI.BT
 {
     public enum NodeStatus : byte
     {

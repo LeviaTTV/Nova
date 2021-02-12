@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Nova.Common.AI.BT.Base;
-
-namespace Nova.Common.AI.BT.Decorator
+﻿namespace Nova.AI.BT.Decorator
 {
     public class Repeater : Base.Decorator
     {
@@ -11,15 +6,15 @@ namespace Nova.Common.AI.BT.Decorator
 
         public int Amount { get; set; }
 
-        public override NodeStatus Execute()
+        public override NodeStatus Execute(AIExecutionContext ctx)
         {
             if (Child == null)
                 return NodeStatus.Success;
 
             if (_count + 1 >= Amount)
-                return Child.Execute();
+                return Child.Execute(ctx);
             
-            var status = Child.Execute();
+            var status = Child.Execute(ctx);
             if (status == NodeStatus.Failure)
                 return NodeStatus.Failure;
 

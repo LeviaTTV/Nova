@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
@@ -9,15 +8,11 @@ using Nova.Common.Primitives;
 using Nova.Common.Sprite;
 using Nova.Environment;
 using Nova.Services;
-using Penumbra;
 
 namespace Nova.Objects.Character
 {
     public class PlayerCharacter : LivingGameObject
     {
-        private readonly List<DirectionCharacterParts> _characterParts = new List<DirectionCharacterParts>();
-        
-        private DirectionCharacterParts _characterPartsDrawable;
         private readonly MapService _mapService;
 
         private Tile _collisionCheckTile;
@@ -26,7 +21,11 @@ namespace Nova.Objects.Character
 
         private Vector2 _origin;
         private readonly GameObjectManager _gameObjectManager;
-        private Camera2D _camera;
+        private readonly Camera2D _camera;
+
+
+        private AnimationSet _walkingAnimationSet;
+        private Animation _currentAnimation;
 
         public PlayerCharacter(GameServiceContainer services) : base(services)
         {
@@ -38,40 +37,21 @@ namespace Nova.Objects.Character
         public override void LoadContent(ContentManager contentManager)
         {
             base.LoadContent(contentManager);
-
-            var parts = new[] {
-                contentManager.Load<SpriteSheet>("Character/Female/BodyFemaleLight"),
-                contentManager.Load<SpriteSheet>("Character/Hair/HairLongPink"),
-                contentManager.Load<SpriteSheet>("Character/Torso/FemaleBlackCorset"),
-                contentManager.Load<SpriteSheet>("Character/Feet/FemaleBrownLongboots"),
-                contentManager.Load<SpriteSheet>("Character/Legs/FemaleRedPants")
-            };
-
-
-            var directionDict = new Dictionary<Orientation, int>()
-            {
-                { Orientation.Bottom, 131 },
-                { Orientation.Top, 105 },
-                { Orientation.Left, 118 },
-                { Orientation.Right, 144 },
-            };
-
-            foreach (var direction in Enum.GetValues(typeof(Orientation)).Cast<Orientation>())
-            {
-                var directionParts = new DirectionCharacterParts()
-                {
-                    Orientation = direction
-                };
-
-                foreach (var sheet in parts)
-                {
-                    directionParts.SpriteSheets.Add(GenerateAnimatedSpriteSheet(sheet.GetSprites(directionDict[direction], 8)));
-                }
-
-
-                _characterParts.Add(directionParts);
-            }
-
+            
+            // Move to content json
+            _walkingAnimationSet = new AnimationSetBuilder(contentManager)
+                .WithName("Walk")
+                .WithAsset("Character/Female/BodyFemaleLight")
+                .WithAsset("Character/Hair/HairLongPink")
+                .WithAsset("Character/Torso/FemaleBlackCorset")
+                .WithAsset("Character/Legs/FemaleRedPants")
+                .WithFrameCount(8)
+                .WithIndex(Orientation.Left, 118)
+                .WithIndex(Orientation.Top, 105)
+                .WithIndex(Orientation.Bottom, 131)
+                .WithIndex(Orientation.Right, 144)
+                .Build();
+            
             _rectangle = new PrimitiveRectangle(Services.GetService<GraphicsDevice>(), Color.Blue, false);
             _rectangle2 = new PrimitiveRectangle(Services.GetService<GraphicsDevice>(), Color.Green, false);
 
@@ -94,37 +74,38 @@ namespace Nova.Objects.Character
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
+            var state = Keyboard.GetState();
 
             float moveSpeed = 250f * ((float)gameTime.ElapsedGameTime.TotalMilliseconds / 1000f);
 
-            var state = Keyboard.GetState();
-
-            bool anyDown = state.IsKeyDown(Keys.W) || state.IsKeyDown(Keys.A) || state.IsKeyDown(Keys.S) || state.IsKeyDown(Keys.D);
-
+            bool anyDown = false;
             var newPosition = Position;
-
             if (state.IsKeyDown(Keys.W))
             {
                 newPosition.Y += -moveSpeed;
                 Orientation = Orientation.Top;
+                anyDown = true;
             }
 
             if (state.IsKeyDown(Keys.A))
             {
                 newPosition.X += -moveSpeed;
                 Orientation = Orientation.Left;
+                anyDown = true;
             }
 
             if (state.IsKeyDown(Keys.D))
             {
                 newPosition.X += moveSpeed;
                 Orientation = Orientation.Right;
+                anyDown = true;
             }
 
             if (state.IsKeyDown(Keys.S))
             {
                 newPosition.Y += moveSpeed;
                 Orientation = Orientation.Bottom;
+                anyDown = true;
             }
 
 
@@ -141,10 +122,9 @@ namespace Nova.Objects.Character
                 if (tile != null && tile.Traversable && !gameObjects.Any())
                     Position = newPosition;
             }
-
-
-            _characterPartsDrawable = _characterParts.FirstOrDefault(x => x.Orientation == Orientation);
-            foreach (var sheets in _characterPartsDrawable.SpriteSheets)
+            
+            _currentAnimation = _walkingAnimationSet.GetAnimationForOrientation(Orientation);
+            foreach (var sheets in _currentAnimation.AnimatedSpriteSheets)
             {
                 sheets.Update(gameTime);
 
@@ -163,7 +143,7 @@ namespace Nova.Objects.Character
 
             int count = 0;
             
-            foreach (var sheets in _characterPartsDrawable.SpriteSheets)
+            foreach (var sheets in _currentAnimation.AnimatedSpriteSheets)
             {
                 ++count;
                 sheets.Draw(spriteBatch, Position, 0f, _origin, SpriteEffects.None, 0.5f - 0.01f * count);

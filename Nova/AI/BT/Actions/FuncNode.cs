@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Nova.Common.AI.BT.Base;
+using Nova.AI.BT.Base;
 
-namespace Nova.Common.AI.BT.Actions
+namespace Nova.AI.BT.Actions
 {
     public class FuncNode : Node
     {
@@ -14,7 +12,7 @@ namespace Nova.Common.AI.BT.Actions
             _action = action;
         }
 
-        public override NodeStatus Execute()
+        public override NodeStatus Execute(AIExecutionContext ctx)
         {
             return _action();
         }

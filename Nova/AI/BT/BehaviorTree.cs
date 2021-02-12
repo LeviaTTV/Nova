@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using Nova.Common.AI.BT.Actions;
-using Nova.Common.AI.BT.Base;
-using Nova.Common.AI.BT.Composite;
-using Nova.Common.AI.BT.Decorator;
+﻿using Nova.AI.BT.Base;
 
-namespace Nova.Common.AI.BT
+namespace Nova.AI.BT
 {
     public class BehaviorTreeBuilder
     {

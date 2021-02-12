@@ -1,9 +1,7 @@
-﻿using System.IO;
-using Microsoft.Xna.Framework.Content.Pipeline;
+﻿using Microsoft.Xna.Framework.Content.Pipeline;
 using Microsoft.Xna.Framework.Content.Pipeline.Serialization.Compiler;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Nova.Common.Sprite;
 using SharpDX.Text;
 
 namespace Nova.Content.Pipeline.Json

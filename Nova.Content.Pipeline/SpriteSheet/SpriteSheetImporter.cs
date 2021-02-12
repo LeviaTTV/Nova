@@ -1,9 +1,5 @@
-﻿using System;
-using System.Diagnostics.Contracts;
-using System.IO;
-using Microsoft.Xna.Framework;
+﻿using System.IO;
 using Microsoft.Xna.Framework.Content.Pipeline;
-using Microsoft.Xna.Framework.Input;
 using Nova.Common.Extensions;
 using Nova.Common.Sprite;
 

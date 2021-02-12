@@ -1,13 +1,6 @@
-﻿using System;
-using System.Diagnostics.Contracts;
-using System.IO;
-using Microsoft.Xna.Framework;
+﻿using System.IO;
 using Microsoft.Xna.Framework.Content.Pipeline;
-using Microsoft.Xna.Framework.Input;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Nova.Common.Extensions;
-using Nova.Common.Sprite;
 
 namespace Nova.Content.Pipeline.Json
 {

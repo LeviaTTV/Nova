@@ -1,5 +1,4 @@
 ﻿using Microsoft.Xna.Framework.Content.Pipeline;
-using Nova.Common.Sprite;
 
 namespace Nova.Content.Pipeline.SpriteSheet
 {

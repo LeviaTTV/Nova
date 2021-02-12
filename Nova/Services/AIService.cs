@@ -3,13 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Resolvers;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
-using Nova.Common.AI.BT.Base;
-using Nova.Common.AI.BT.Models;
+using Nova.AI.BT.Base;
+using Nova.AI.BT.Models;
 using Nova.Common.Extensions;
 using Nova.Objects.Character;
 

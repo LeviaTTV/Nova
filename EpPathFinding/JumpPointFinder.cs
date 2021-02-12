@@ -37,7 +37,6 @@ An Interface for the Jump Point Search Algorithm Class.
 */
 using System;
 using System.Collections.Generic;
-using C5;
 using EpPathFinding.Grid;
 
 namespace EpPathFinding

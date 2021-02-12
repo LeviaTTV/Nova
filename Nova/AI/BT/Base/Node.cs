@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
-namespace Nova.Common.AI.BT.Base
+namespace Nova.AI.BT.Base
 {
     public abstract class Node
     {
@@ -12,7 +10,7 @@ namespace Nova.Common.AI.BT.Base
         public List<Node> Children { get; private set; } = new List<Node>();
         public string AppliesTo { get; set; }
 
-        public virtual NodeStatus Execute()
+        public virtual NodeStatus Execute(AIExecutionContext ctx)
         {
             return NodeStatus.Success;
         }

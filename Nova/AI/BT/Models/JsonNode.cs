@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Nova.Common.AI.BT.Base;
+﻿using System.Collections.Generic;
 
-namespace Nova.Common.AI.BT.Models
+namespace Nova.AI.BT.Models
 {
     public class JsonNode
     {

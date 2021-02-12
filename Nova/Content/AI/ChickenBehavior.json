@@ -7,13 +7,10 @@
             "Type": "Sequence",
             "Children": [
                 {
-                    "Type": "DetectLureBehavior"
+                    "Type": "IsPlayerNearbyBehavior"
                 },
                 {
-                    "Type": "MoveToLureBehavior"
-                },
-                {
-                    "Type": "EatLureBehavior"
+                    "Type": "RunAwayFromPlayerBehavior"
                 }
             ]
         },

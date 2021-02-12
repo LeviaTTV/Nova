@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 using Nova.Common.Sprite;
 using Nova.Objects.Character;
 
@@ -14,90 +9,99 @@ namespace Nova.Objects.Animals
 {
     public class Chicken : LivingGameObject
     {
-        private SpriteSheet _chickenEatSheet;
-        private SpriteSheet _chickenWalkSheet;
+        private AnimationSet _walkingAnimation;
+        private AnimationSet _eatingAnimation;
 
-        
-        
-
-        private readonly Dictionary<Orientation, AnimatedSpriteSheet> _walkingSheets = new Dictionary<Orientation, AnimatedSpriteSheet>();
-
-
-        private AnimatedSpriteSheet _currentSpriteSheet;
-
-        private bool _isMoving = false;
+        private AnimatedSpriteSheet _currentAnimationSheet;
 
         public Chicken(GameServiceContainer services) : base(services)
         {
+            SupportedActions[nameof(Eat)] = new LivingAction()
+            {
+                Action = Eat
+            };
         }
 
         public override void LoadContent(ContentManager contentManager)
         {
             base.LoadContent(contentManager);
 
-            _chickenEatSheet = contentManager.Load<SpriteSheet>("Animals/AnimalChickenEat");
-            _chickenWalkSheet = contentManager.Load<SpriteSheet>("Animals/AnimalChickenWalk");
+            _walkingAnimation = new AnimationSetBuilder(contentManager)
+                .WithAsset("Animals/AnimalChickenWalk")
+                .WithName("Walk")
+                .WithFrameCount(4)
+                .WithIndex(Orientation.Left, 4)
+                .WithIndex(Orientation.Top, 0)
+                .WithIndex(Orientation.Bottom, 8)
+                .WithIndex(Orientation.Right, 12)
+                .Build();
+
+            _eatingAnimation = new AnimationSetBuilder(contentManager)
+                .WithAsset("Animals/AnimalChickenEat")
+                .WithName("Walk")
+                .WithFrameCount(4)
+                .WithIndex(Orientation.Left, 4)
+                .WithIndex(Orientation.Top, 0)
+                .WithIndex(Orientation.Bottom, 8)
+                .WithIndex(Orientation.Right, 12)
+                .WithAnimatedSpriteSheetOptions(z => z.Repeat = false)
+                .Build();
             
-            var sheet = new AnimatedSpriteSheet(_chickenWalkSheet.Texture, 32, 32);
-            int count = 0;
-            foreach (var sprite in _chickenWalkSheet.GetSprites(0, 4))
+            foreach (var tempSheet in _walkingAnimation.Animations.SelectMany(z => z.AnimatedSpriteSheets))
+                tempSheet.Start();
+        }
+
+        private void Eat(GameTime gameTime, LivingAction action)
+        {
+            var anim = _eatingAnimation.GetAnimationForOrientation(Orientation);
+            var sheet = anim.AnimatedSpriteSheets.FirstOrDefault();
+            
+            sheet.Update(gameTime);
+            
+            if (sheet.HasEnded)
             {
-                ++count;
-                sheet.Sprites[count.ToString()] = sprite;
+                action.IsRunning = false;
+                sheet.Reset();
+                
+                _currentAnimationSheet = anim.AnimatedSpriteSheets.FirstOrDefault();
+                _currentAnimationSheet.Reset();
+                return;
             }
-            _walkingSheets[Orientation.Top] = sheet;
-
-            sheet = new AnimatedSpriteSheet(_chickenWalkSheet.Texture, 32, 32);
-            count = 0;
-            foreach (var sprite in _chickenWalkSheet.GetSprites(4, 4))
-            {
-                ++count;
-                sheet.Sprites[count.ToString()] = sprite;
-            }
-            _walkingSheets[Orientation.Left] = sheet;
-
-            sheet = new AnimatedSpriteSheet(_chickenWalkSheet.Texture, 32, 32);
-            count = 0;
-            foreach (var sprite in _chickenWalkSheet.GetSprites(8, 4))
-            {
-                ++count;
-                sheet.Sprites[count.ToString()] = sprite;
-            }
-            _walkingSheets[Orientation.Bottom] = sheet;
-
-            sheet = new AnimatedSpriteSheet(_chickenWalkSheet.Texture, 32, 32);
-            count = 0;
-            foreach (var sprite in _chickenWalkSheet.GetSprites(12, 4))
-            {
-                ++count;
-                sheet.Sprites[count.ToString()] = sprite;
-            }
-            _walkingSheets[Orientation.Right] = sheet;
-
-
-            foreach (var tempSheet in _walkingSheets)
-                tempSheet.Value.Start();
+            
+            _currentAnimationSheet = sheet;
         }
 
         public override void Update(GameTime gameTime)
         {
             base.Update(gameTime);
-
-            _currentSpriteSheet = _walkingSheets[Orientation];
             
-            if (!_isMoving)
-                _currentSpriteSheet.Reset();
+            var anim = _walkingAnimation.GetAnimationForOrientation(Orientation);
+            var sheet = anim.AnimatedSpriteSheets.FirstOrDefault();
+            if (!IsMoving)
+                sheet.Reset();
             else
-                _currentSpriteSheet.Update(gameTime);
+                sheet.Update(gameTime);
 
-            _isMoving = true;
+            if (ActiveActions.Any())
+            {
+                foreach (var act in ActiveActions)
+                {
+                    act.Action(gameTime, act);
+                }
+
+                return;
+            }
+
+            _currentAnimationSheet = anim.AnimatedSpriteSheets.FirstOrDefault();
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
             base.Draw(spriteBatch);
+            
+            float zDepth = 0.7f - Position.Y * 0.00001f + Position.X * 0.00001f;
 
-            _currentSpriteSheet.Draw(spriteBatch, Position, layerDepth: 0f);
+            _currentAnimationSheet.Draw(spriteBatch, Position, layerDepth: zDepth);
         }
     }
 }

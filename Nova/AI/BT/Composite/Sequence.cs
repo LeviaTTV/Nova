@@ -1,21 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 
-namespace Nova.Common.AI.BT.Composite
+namespace Nova.AI.BT.Composite
 {
     public class Sequence : Base.Composite
     {
         public int _step = 0;
 
-        public override NodeStatus Execute()
+        public override NodeStatus Execute(AIExecutionContext ctx)
         {
             if (!Children.Any())
                 return NodeStatus.Success;
 
             var node = Children[_step];
-            var status = node.Execute();
+            var status = node.Execute(ctx);
             switch (status)
             {
                 case NodeStatus.Success:
