@@ -1,7 +1,7 @@
 # Nova
 Attempt at a 2D top down game in Monogame. See [Levia on Twitch](https://twitch.tv/L3via) where I stream parts of the development for this :)
 
-![Terrain generation](Preview.PNG?raw=true "TerrainGeneration")
+![Preview](12Feb2021.gif?raw=true "TerrainGeneration")
 
 
 ## Credits
