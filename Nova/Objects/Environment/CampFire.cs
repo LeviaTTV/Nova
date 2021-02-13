@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using Nova.Common.Primitives;
 using Nova.Common.Sprite;
 using Nova.Objects.Character;
 using Penumbra;
@@ -20,6 +21,8 @@ namespace Nova.Objects.Environment
         private readonly PlayerCharacter _playerCharacter;
 
         public override bool CollisionEnabled => false;
+
+        private PrimitiveRectangle _rectangle;
 
         public CampFire(GameServiceContainer services) : base(services)
         {
@@ -42,6 +45,8 @@ namespace Nova.Objects.Environment
 
             Height = _sheet.Sprites.FirstOrDefault().Value.Height;
             Width = _sheet.Sprites.FirstOrDefault().Value.Width;
+
+            _rectangle = new PrimitiveRectangle(Services.GetService<GraphicsDevice>(), Color.Red, false);
         }
 
         public override void Update(GameTime gameTime)
@@ -65,13 +70,12 @@ namespace Nova.Objects.Environment
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            float z = 0.7f;
-            if (Position.Y + Height + 8f > _playerCharacter.Position.Y + 32)
-                z = 0.4f;
+            _sheet.Draw(spriteBatch, Position);
 
-            z -= Position.Y * 0.00001f + Position.X * 0.00001f;
-
-            _sheet.Draw(spriteBatch, Position, layerDepth: z);
+            if (DebugTools.GenericDebugEnabled)
+            {
+                _rectangle.Draw(spriteBatch, Position + new Vector2(0, Height), 2, 2);
+            }
         }
     }
 }

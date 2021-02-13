@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System.Linq;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Nova.Common.Primitives;
@@ -96,8 +97,8 @@ namespace Nova
 
             //var mapGenerator = new MapGenerator(Services, GraphicsDevice, Guid.NewGuid().GetHashCode(), Content);
             var mapGenerator = new MapGenerator(Services, GraphicsDevice, -425262119, Content);
-            //_map = mapGenerator.Generate(400, 400);
-            _map = mapGenerator.Generate(100, 100);
+            _map = mapGenerator.Generate(400, 400);
+            //_map = mapGenerator.Generate(100, 100);
 
             mapService.Map = _map;
             _character.Position = _map.StartPosition;
@@ -140,6 +141,7 @@ namespace Nova
             DebugTools.GenericDebugEnabled = Keyboard.GetState().IsKeyDown(Keys.E);
             DebugTools.DoNotRenderTileTransitions = Keyboard.GetState().IsKeyDown(Keys.R);
             DebugTools.IncreaseSpeedOfTime = Keyboard.GetState().IsKeyDown(Keys.T);
+            DebugTools.ShowPathFindingIgnoredTiles = Keyboard.GetState().IsKeyDown(Keys.P);
 
             _timeService.OneMinutePassesEveryXMilliseconds = DebugTools.IncreaseSpeedOfTime ? 10 : 1000;
             
@@ -179,15 +181,15 @@ namespace Nova
             _penumbra.BeginDraw();
             
             GraphicsDevice.Clear(Color.CornflowerBlue);
-
-            _spriteBatch.Begin(sortMode: SpriteSortMode.BackToFront, samplerState: SamplerState.PointClamp, transformMatrix: _camera2D.Transform);
+            
+            _spriteBatch.Begin(sortMode: SpriteSortMode.Deferred, samplerState: SamplerState.PointClamp, transformMatrix: _camera2D.Transform);
             _mapRenderer.Draw(_spriteBatch);
             
 
             DrawGameObjects();
 
 
-            if (DebugTools.GenericDebugEnabled)
+            if (DebugTools.ShowPathFindingIgnoredTiles)
             {
                 foreach (var bla in _pathFindingService.NotIncludedTiles)
                 {
@@ -214,15 +216,7 @@ namespace Nova
             int endY = rectBounds.Y + rectBounds.Height;
             int endX = rectBounds.X + rectBounds.Width;
 
-            foreach (var gameObject in _gameObjectManager.FoliageGameObjects.Values)
-            {
-                int objectX = gameObject.Tile.X * 32;
-                int objectY = gameObject.Tile.Y * 32;
-                if (objectX + gameObject.Width >= rectBounds.X && objectY + gameObject.Height >= rectBounds.Y && objectX - gameObject.Width <= endX && objectY - gameObject.Height <= endY)
-                    gameObject.Draw(_spriteBatch);
-            }
-
-            foreach (var gameObject in _gameObjectManager.GameObjects)
+            foreach (var gameObject in _gameObjectManager.GameObjects.OrderBy(x => x.Position.Y + x.Height - x.Origin.Y))
             {
                 if (gameObject.Position.X + gameObject.Width >= rectBounds.X && gameObject.Position.Y + gameObject.Height >= rectBounds.Y && gameObject.Position.X - gameObject.Width <= endX && gameObject.Position.Y - gameObject.Height <= endY)
                     gameObject.Draw(_spriteBatch);

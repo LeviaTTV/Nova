@@ -66,8 +66,6 @@ namespace Nova.Environment.Generation
             TransitionSelectionPass(map);
 
             FoliagePass(map);
-
-            _gameObjectManager.SortFoliageGameObjectsByYCoordinate();
             
             SpawnLocationPass(map);
 
@@ -199,7 +197,8 @@ namespace Nova.Environment.Generation
                 tile
             });
 
-            _gameObjectManager.AddFoliageGameObject(gameObject);
+            //_gameObjectManager.AddFoliageGameObject(gameObject);
+            _gameObjectManager.AddGameObject(gameObject);
         }
 
         private void PreloadSpriteSheets()

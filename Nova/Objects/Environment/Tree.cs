@@ -15,11 +15,11 @@ namespace Nova.Objects.Environment
         private Sprite _sprite;
 
         private Rectangle _destinationRectangle;
-        private Vector2 _origin;
         private readonly PlayerCharacter _playerCharacter;
         private PrimitiveRectangle _rectangle;
         private PrimitiveRectangle _rectangle2;
         private PrimitiveRectangle _rectangle3;
+        private PrimitiveRectangle _rectangle4;
 
         public Tree(GameServiceContainer services, Tile tile)
             : base(services, tile)
@@ -78,43 +78,34 @@ namespace Nova.Objects.Environment
             _sprite = potentialTrees[rand.Next(0, potentialTrees.Count)].Value;
 
             // Precalculate position and origin
-            var position = new Vector2(Tile.X * 32, Tile.Y * 32);
-            _destinationRectangle = new Rectangle((int) position.X, (int) position.Y, (int) _sprite.Width, (int) _sprite.Height);
-            _origin = new Vector2(_sprite.Width / 2f - 16, _sprite.Height - 32);
+            _destinationRectangle = new Rectangle((int) Position.X, (int)Position.Y, (int) _sprite.Width, (int) _sprite.Height);
+            Origin = new Vector2(_sprite.Width / 2f - 16, _sprite.Height - 32);
 
             _rectangle = new PrimitiveRectangle(Services.GetService<GraphicsDevice>(), Color.Red, false);
             _rectangle2 = new PrimitiveRectangle(Services.GetService<GraphicsDevice>(), Color.Yellow, false);
             _rectangle3 = new PrimitiveRectangle(Services.GetService<GraphicsDevice>(), Color.Green, false);
+            _rectangle4 = new PrimitiveRectangle(Services.GetService<GraphicsDevice>(), Color.SkyBlue, false);
 
             Width = _sprite.Width;
             Height = _sprite.Height;
 
-            VisualBounds = new Rectangle((int)(position.X - _origin.X), (int)(position.Y - _origin.Y), Width, Height);
+            VisualBounds = new Rectangle((int)(Position.X - Origin.X), (int)(Position.Y - Origin.Y), Width, Height);
 
 
             var width = (int)(_sprite.Width / 2f);
-            CollisionBounds = new Rectangle(VisualBounds.X + VisualBounds.Width / 2 - width / 2, (int)position.Y - 4, width, 36); //32
+            CollisionBounds = new Rectangle(VisualBounds.X + VisualBounds.Width / 2 - width / 2, (int)Position.Y - 4, width, 36); //32
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            float z = 0.7f;
-            if (Tile.Y * 32 + 32 > _playerCharacter.Position.Y + 32)
-            {
-                z = 0.4f;
-            }
-
-            z -= Tile.Y * 0.00001f + Tile.X * 0.00001f;
-            spriteBatch.Draw(_sprite.Texture, _destinationRectangle, _sprite.SourceRectangle, Color.White, 0f, _origin, SpriteEffects.None, z);
+            spriteBatch.Draw(_sprite.Texture, _destinationRectangle, _sprite.SourceRectangle, Color.White, 0f, Origin, SpriteEffects.None, 0f);
 
             if (DebugTools.GenericDebugEnabled)
             {
                 _rectangle.Draw(spriteBatch, new Vector2(_destinationRectangle.X, _destinationRectangle.Y), 32, 32);
-
-                //_rectangle2.Draw(spriteBatch, new Vector2(VisualBounds.X, VisualBounds.Y), VisualBounds.Width, VisualBounds.Height);
                 _rectangle2.Draw(spriteBatch, VisualBounds);
                 _rectangle3.Draw(spriteBatch, CollisionBounds);
-
+                _rectangle4.Draw(spriteBatch, Position, 4, 4);
             }
         }
     }

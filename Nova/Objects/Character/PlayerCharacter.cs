@@ -18,8 +18,7 @@ namespace Nova.Objects.Character
         private Tile _collisionCheckTile;
         private PrimitiveRectangle _rectangle;
         private PrimitiveRectangle _rectangle2;
-
-        private Vector2 _origin;
+        
         private readonly GameObjectManager _gameObjectManager;
         private readonly Camera2D _camera;
 
@@ -55,7 +54,7 @@ namespace Nova.Objects.Character
             _rectangle = new PrimitiveRectangle(Services.GetService<GraphicsDevice>(), Color.Blue, false);
             _rectangle2 = new PrimitiveRectangle(Services.GetService<GraphicsDevice>(), Color.Green, false);
 
-            _origin = new Vector2(32, 64);
+            Origin = new Vector2(32, 64);
 
             Width = 32;
             Height = 64;
@@ -115,7 +114,7 @@ namespace Nova.Objects.Character
                 var tile = _mapService.GetTileAt(newPosition);
                 _collisionCheckTile = tile;
 
-                CollisionBounds = new Rectangle((int)(newPosition.X - _origin.X / 2) + 4, (int)(newPosition.Y - _origin.Y) + 32 + 8, 32 - 8, 24);
+                CollisionBounds = new Rectangle((int)(newPosition.X - Origin.X / 2) + 4, (int)(newPosition.Y - Origin.Y) + 32 + 8, 32 - 8, 24);
 
                 var gameObjects = _gameObjectManager.GetCollidingFoliageGameObjects(this, CollisionBounds);
 
@@ -146,7 +145,7 @@ namespace Nova.Objects.Character
             foreach (var sheets in _currentAnimation.AnimatedSpriteSheets)
             {
                 ++count;
-                sheets.Draw(spriteBatch, Position, 0f, _origin, SpriteEffects.None, 0.5f - 0.01f * count);
+                sheets.Draw(spriteBatch, Position, 0f, Origin, SpriteEffects.None, 0.5f - 0.01f * count);
             }
 
             if (DebugTools.GenericDebugEnabled)
@@ -155,6 +154,8 @@ namespace Nova.Objects.Character
                     _rectangle.Draw(spriteBatch, new Vector2(_collisionCheckTile.X * 32f, _collisionCheckTile.Y * 32), 32, 32);
                 
                 _rectangle2.Draw(spriteBatch, CollisionBounds);
+
+                _rectangle.Draw(spriteBatch, new Vector2(Position.X, Position.Y), 2, 2);
             }
         }
     }

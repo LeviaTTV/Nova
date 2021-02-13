@@ -26,7 +26,8 @@ namespace Nova.Services
         {
             var matrix = new bool[_map.Width, _map.Height];
 
-            var collisionBounds = _gameObjectManager.FoliageGameObjects.Values.Where(x => x.CollisionEnabled).Select(z => z.CollisionBounds).ToList();
+            //var collisionBounds = _gameObjectManager.FoliageGameObjects.Values.Where(x => x.CollisionEnabled).Select(z => z.CollisionBounds).ToList();
+            var collisionBounds = _gameObjectManager.GameObjects.Where(x => x.CollisionEnabled).Select(z => z.CollisionBounds).ToList();
 
             for (int y = 0; y < _map.Height; y++)
             {

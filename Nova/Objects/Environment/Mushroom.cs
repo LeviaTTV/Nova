@@ -25,13 +25,12 @@ namespace Nova.Objects.Environment
             var rand = new Random(Guid.NewGuid().GetHashCode());
 
             _sprite = sheet[potentialShrooms[rand.Next(0, potentialShrooms.Length)]];
+
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            var position = new Vector2(Tile.X * 32, Tile.Y * 32);
-
-            _sprite.Draw(spriteBatch, position, layerDepth: 0.9f);
+            _sprite.Draw(spriteBatch, Position);
         }
     }
 }

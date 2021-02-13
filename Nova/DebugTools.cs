@@ -6,5 +6,6 @@
         public static bool DoNotRenderTileTransitions { get; set; }
 
         public static bool IncreaseSpeedOfTime { get; set; }
+        public static bool ShowPathFindingIgnoredTiles { get; set; }
     }
 }

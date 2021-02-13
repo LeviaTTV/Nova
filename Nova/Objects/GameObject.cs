@@ -10,7 +10,7 @@ namespace Nova.Objects
         public Vector2 Position { get; set; }
         public int Width { get; set; }
         public int Height { get; set; }
-
+        public Vector2 Origin { get; set; }
         public Rectangle Bounds => new Rectangle((int) Position.X, (int) Position.Y, Width, Height);
         public Rectangle VisualBounds { get; protected set; }
 

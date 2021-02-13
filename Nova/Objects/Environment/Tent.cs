@@ -60,16 +60,7 @@ namespace Nova.Objects.Environment
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            float z = 0.7f;
-            if (Position.Y + Height > _playerCharacter.Position.Y + 64f)
-            {
-                z = 0.4f;
-            }
-
-            z -= Position.Y * 0.00001f + Position.X * 0.00001f;
-
-
-            _sprite.Draw(spriteBatch, Position, layerDepth: z);
+            _sprite.Draw(spriteBatch, Position);
 
             if (DebugTools.GenericDebugEnabled)
             {

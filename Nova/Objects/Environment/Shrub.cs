@@ -45,22 +45,13 @@ namespace Nova.Objects.Environment
             Height = _sprite.Height;
 
             VisualBounds = new Rectangle((int)Tile.X * 32, (int)Tile.Y * 32, Width, Height);
-
+            Origin = new Vector2(_sprite.Width / 2f - 16, _sprite.Height - 32);
             _rectangle = new PrimitiveRectangle(Services.GetService<GraphicsDevice>(), Color.DarkGreen, false);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            var position = new Vector2(Tile.X * 32, Tile.Y * 32);
-            
-            float z = 0.7f;
-            if (Tile.Y * 32 + 64 > _playerCharacter.Position.Y + 32 && _playerCharacter.CollisionBounds.Intersects(VisualBounds))
-            {
-                z = 0.4f;
-            }
-
-            z -= Tile.Y * 0.00001f + Tile.X * 0.00001f;
-            _sprite.Draw(spriteBatch, position, layerDepth: z);
+            _sprite.Draw(spriteBatch, Position);
 
             if (DebugTools.GenericDebugEnabled)
                 _rectangle.Draw(spriteBatch, VisualBounds);
