@@ -196,8 +196,7 @@ namespace Nova.Environment.Generation
                 _services,
                 tile
             });
-
-            //_gameObjectManager.AddFoliageGameObject(gameObject);
+            
             _gameObjectManager.AddGameObject(gameObject);
         }
 
